@@ -397,26 +397,30 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="/">Início</a>
+                        <a class="nav-link" href="index.html">Início</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/movies">Filmes</a>
+                        <a class="nav-link" href="movies.html">Filmes</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="/series">Séries</a>
+                        <a class="nav-link active" href="series.html">Séries</a>
                     </li>
                 </ul>
-                <div class="user-menu">
+                <div class="user-menu" id="userMenu" style="display: none;">
                     <button class="btn btn-link text-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
                         <i class="fas fa-user-circle"></i>
                         <span id="userName">Usuário</span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="/profile">Meu Perfil</a></li>
-                        <li><a class="dropdown-item" href="/watchlist">Minha Lista</a></li>
+                        <li><a class="dropdown-item" href="profile.html">Meu Perfil</a></li>
+                        <li><a class="dropdown-item" href="watchlist.html">Minha Lista</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="#" id="logoutBtn">Sair</a></li>
                     </ul>
+                </div>
+                <div id="authButtons">
+                    <a href="login.html" class="btn btn-outline-light me-2">Entrar</a>
+                    <a href="register.html" class="btn btn-primary">Criar Conta</a>
                 </div>
             </div>
         </div>

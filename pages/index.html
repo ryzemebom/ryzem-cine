@@ -51,51 +51,32 @@
         }
 
         .hero {
-            position: relative;
             height: 100vh;
-            background-image: url('/assets/images/hero-bg.jpg');
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                        url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
             background-size: cover;
             background-position: center;
             display: flex;
             align-items: center;
-            justify-content: center;
             text-align: center;
-            padding: 2rem;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), var(--secondary-color));
+            padding: 0 2rem;
         }
 
         .hero-content {
-            position: relative;
-            z-index: 1;
             max-width: 800px;
+            margin: 0 auto;
         }
 
-        .hero h1 {
+        .hero-title {
             font-size: 4rem;
             font-weight: bold;
             margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
 
-        .hero p {
+        .hero-subtitle {
             font-size: 1.5rem;
             opacity: 0.9;
             margin-bottom: 2rem;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
         }
 
         .btn-primary {
@@ -103,6 +84,7 @@
             border: none;
             padding: 1rem 2rem;
             font-size: 1.2rem;
+            margin: 0 1rem;
             transition: background-color 0.3s;
         }
 
@@ -114,6 +96,7 @@
             border: 2px solid var(--text-color);
             padding: 1rem 2rem;
             font-size: 1.2rem;
+            margin: 0 1rem;
             transition: all 0.3s;
         }
 
@@ -130,12 +113,18 @@
         .feature-card {
             text-align: center;
             padding: 2rem;
+            border-radius: 10px;
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
         }
 
         .feature-icon {
             font-size: 3rem;
             color: var(--primary-color);
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
         }
 
         .feature-title {
@@ -149,183 +138,75 @@
         }
 
         .content-section {
-            padding: 4rem 2rem;
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
+            padding: 6rem 2rem;
         }
 
         .section-title {
-            font-size: 2rem;
+            font-size: 2.5rem;
             font-weight: bold;
+            margin-bottom: 3rem;
+            text-align: center;
         }
 
-        .section-link {
-            color: var(--primary-color);
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .section-link:hover {
-            color: var(--hover-color);
-        }
-
-        .content-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 2rem;
-        }
-
-        .content-card {
+        .card {
             background-color: rgba(255, 255, 255, 0.1);
+            border: none;
             border-radius: 10px;
             overflow: hidden;
             transition: transform 0.3s;
+            height: 100%;
         }
 
-        .content-card:hover {
+        .card:hover {
             transform: scale(1.05);
         }
 
-        .content-image {
+        .card img {
             width: 100%;
             height: 300px;
             object-fit: cover;
         }
 
-        .content-info {
+        .card-body {
             padding: 1.5rem;
         }
 
-        .content-title {
-            font-size: 1.1rem;
+        .card-title {
+            font-size: 1.2rem;
             font-weight: bold;
             margin-bottom: 0.5rem;
         }
 
-        .content-meta {
-            display: flex;
-            gap: 1rem;
-            font-size: 0.9rem;
+        .card-text {
             opacity: 0.8;
-            margin-bottom: 1rem;
-        }
-
-        .content-badges {
-            display: flex;
-            gap: 0.5rem;
             margin-bottom: 1rem;
         }
 
         .badge {
             background-color: var(--primary-color);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
+            margin-right: 0.5rem;
         }
 
         .cta {
-            background-image: url('/assets/images/cta-bg.jpg');
+            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)),
+                        url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
             background-size: cover;
             background-position: center;
             padding: 6rem 2rem;
             text-align: center;
-            position: relative;
         }
 
-        .cta::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(to right, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.7));
-        }
-
-        .cta-content {
-            position: relative;
-            z-index: 1;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .cta h2 {
-            font-size: 2.5rem;
+        .cta-title {
+            font-size: 3rem;
             font-weight: bold;
             margin-bottom: 1rem;
         }
 
-        .cta p {
+        .cta-description {
             font-size: 1.2rem;
             opacity: 0.9;
-            margin-bottom: 2rem;
-        }
-
-        .footer {
-            background-color: rgba(0, 0, 0, 0.9);
-            padding: 4rem 2rem 2rem;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .footer-section h3 {
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin-bottom: 1rem;
-        }
-
-        .footer-links {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .footer-links li {
-            margin-bottom: 0.5rem;
-        }
-
-        .footer-links a {
-            color: var(--text-color);
-            text-decoration: none;
-            opacity: 0.8;
-            transition: opacity 0.3s;
-        }
-
-        .footer-links a:hover {
-            opacity: 1;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .social-links a {
-            color: var(--text-color);
-            font-size: 1.5rem;
-            transition: color 0.3s;
-        }
-
-        .social-links a:hover {
-            color: var(--primary-color);
-        }
-
-        .copyright {
-            text-align: center;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            opacity: 0.8;
+            max-width: 600px;
+            margin: 0 auto 2rem;
         }
 
         .user-menu {
@@ -346,37 +227,31 @@
         }
 
         @media (max-width: 768px) {
-            .hero {
-                height: 80vh;
-            }
-
-            .hero h1 {
+            .hero-title {
                 font-size: 2.5rem;
             }
 
-            .hero p {
+            .hero-subtitle {
                 font-size: 1.2rem;
             }
 
-            .hero-buttons {
-                flex-direction: column;
+            .btn-primary, .btn-outline-light {
+                display: block;
+                margin: 1rem auto;
+                width: 100%;
+                max-width: 300px;
             }
 
-            .content-grid {
-                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-                gap: 1rem;
+            .content-section {
+                padding: 3rem 1rem;
             }
 
-            .content-image {
-                height: 225px;
-            }
-
-            .cta h2 {
+            .section-title {
                 font-size: 2rem;
             }
 
-            .cta p {
-                font-size: 1rem;
+            .card img {
+                height: 200px;
             }
         }
     </style>
@@ -392,26 +267,30 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="/">Início</a>
+                        <a class="nav-link" href="index.html">Início</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/movies">Filmes</a>
+                        <a class="nav-link" href="movies.html">Filmes</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/series">Séries</a>
+                        <a class="nav-link" href="series.html">Séries</a>
                     </li>
                 </ul>
-                <div class="user-menu">
+                <div class="user-menu" id="userMenu" style="display: none;">
                     <button class="btn btn-link text-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
                         <i class="fas fa-user-circle"></i>
                         <span id="userName">Usuário</span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="/profile">Meu Perfil</a></li>
-                        <li><a class="dropdown-item" href="/watchlist">Minha Lista</a></li>
+                        <li><a class="dropdown-item" href="profile.html">Meu Perfil</a></li>
+                        <li><a class="dropdown-item" href="watchlist.html">Minha Lista</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="#" id="logoutBtn">Sair</a></li>
                     </ul>
+                </div>
+                <div id="authButtons">
+                    <a href="login.html" class="btn btn-outline-light me-2">Entrar</a>
+                    <a href="register.html" class="btn btn-primary">Criar Conta</a>
                 </div>
             </div>
         </div>
@@ -420,15 +299,11 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content">
-            <h1>Bem-vindo ao Ryzem Cine</h1>
-            <p>Descubra os melhores filmes e séries em um só lugar</p>
-            <div class="hero-buttons">
-                <a href="/movies" class="btn btn-primary">
-                    <i class="fas fa-film"></i> Explorar Filmes
-                </a>
-                <a href="/series" class="btn btn-outline-light">
-                    <i class="fas fa-tv"></i> Explorar Séries
-                </a>
+            <h1 class="hero-title">Bem-vindo ao Ryzem Cine</h1>
+            <p class="hero-subtitle">Assista aos melhores filmes e séries em um só lugar</p>
+            <div>
+                <a href="register.html" class="btn btn-primary">Começar Agora</a>
+                <a href="movies.html" class="btn btn-outline-light">Explorar</a>
             </div>
         </div>
     </section>
@@ -446,16 +321,16 @@
                 </div>
                 <div class="col-md-4">
                     <div class="feature-card">
-                        <i class="fas fa-trophy feature-icon"></i>
+                        <i class="fas fa-tv feature-icon"></i>
                         <h3 class="feature-title">Séries Premiadas</h3>
-                        <p class="feature-description">As melhores séries, incluindo produções originais e sucessos internacionais.</p>
+                        <p class="feature-description">Assista às melhores séries com episódios completos e atualizações semanais.</p>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="feature-card">
                         <i class="fas fa-mobile-alt feature-icon"></i>
-                        <h3 class="feature-title">Multiplataforma</h3>
-                        <p class="feature-description">Assista em qualquer dispositivo, a qualquer momento e em qualquer lugar.</p>
+                        <h3 class="feature-title">Assista em Qualquer Lugar</h3>
+                        <p class="feature-description">Disponível em todos os seus dispositivos, com sincronização automática.</p>
                     </div>
                 </div>
             </div>
@@ -465,11 +340,8 @@
     <!-- Featured Movies Section -->
     <section class="content-section">
         <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Filmes em Destaque</h2>
-                <a href="/movies" class="section-link">Ver Todos <i class="fas fa-chevron-right"></i></a>
-            </div>
-            <div class="content-grid" id="featuredMovies">
+            <h2 class="section-title">Filmes em Destaque</h2>
+            <div class="row" id="featuredMovies">
                 <!-- Conteúdo será carregado dinamicamente -->
             </div>
         </div>
@@ -478,11 +350,8 @@
     <!-- Featured Series Section -->
     <section class="content-section">
         <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Séries em Destaque</h2>
-                <a href="/series" class="section-link">Ver Todas <i class="fas fa-chevron-right"></i></a>
-            </div>
-            <div class="content-grid" id="featuredSeries">
+            <h2 class="section-title">Séries em Destaque</h2>
+            <div class="row" id="featuredSeries">
                 <!-- Conteúdo será carregado dinamicamente -->
             </div>
         </div>
@@ -490,72 +359,29 @@
 
     <!-- CTA Section -->
     <section class="cta">
-        <div class="cta-content">
-            <h2>Comece a Assistir Hoje</h2>
-            <p>Crie sua conta gratuita e tenha acesso a milhares de filmes e séries.</p>
-            <a href="/register" class="btn btn-primary">
-                <i class="fas fa-user-plus"></i> Criar Conta
-            </a>
+        <div class="container">
+            <h2 class="cta-title">Comece a Assistir Hoje</h2>
+            <p class="cta-description">Junte-se a milhares de espectadores e tenha acesso a conteúdo exclusivo.</p>
+            <a href="register.html" class="btn btn-primary btn-lg">Criar Conta Grátis</a>
         </div>
     </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>Sobre</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">Quem Somos</a></li>
-                        <li><a href="#">Carreiras</a></li>
-                        <li><a href="#">Blog</a></li>
-                        <li><a href="#">Imprensa</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>Ajuda</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">FAQ</a></li>
-                        <li><a href="#">Suporte</a></li>
-                        <li><a href="#">Contato</a></li>
-                        <li><a href="#">Política de Privacidade</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>Legal</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">Termos de Uso</a></li>
-                        <li><a href="#">Política de Cookies</a></li>
-                        <li><a href="#">Preferências de Cookies</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>Redes Sociais</h3>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="copyright">
-                <p>&copy; 2024 Ryzem Cine. Todos os direitos reservados.</p>
-            </div>
-        </div>
-    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // Verificar autenticação
         function checkAuth() {
             const token = localStorage.getItem('token');
-            if (!token) {
-                window.location.href = '/login';
-                return;
+            const userMenu = document.getElementById('userMenu');
+            const authButtons = document.getElementById('authButtons');
+
+            if (token) {
+                userMenu.style.display = 'block';
+                authButtons.style.display = 'none';
+                fetchUserInfo();
+            } else {
+                userMenu.style.display = 'none';
+                authButtons.style.display = 'block';
             }
-            fetchUserInfo();
-            loadFeaturedContent();
         }
 
         // Buscar informações do usuário
@@ -570,7 +396,8 @@
                 document.getElementById('userName').textContent = user.name;
             } catch (error) {
                 console.error('Erro ao buscar informações do usuário:', error);
-                window.location.href = '/login';
+                localStorage.removeItem('token');
+                window.location.reload();
             }
         }
 
@@ -578,56 +405,125 @@
         document.getElementById('logoutBtn').addEventListener('click', (e) => {
             e.preventDefault();
             localStorage.removeItem('token');
-            window.location.href = '/';
+            window.location.reload();
         });
 
-        // Carregar conteúdo em destaque
-        async function loadFeaturedContent() {
+        // Carregar filmes em destaque
+        async function loadFeaturedMovies() {
             try {
-                // Carregar filmes em destaque
-                const moviesResponse = await fetch('/api/movies/featured', {
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    }
-                });
-                const movies = await moviesResponse.json();
-                renderContent('featuredMovies', movies, 'movie');
+                const response = await fetch('/api/movies/featured');
+                if (!response.ok) {
+                    throw new Error(`Erro ao carregar filmes: ${response.status}`);
+                }
+                const movies = await response.json();
 
-                // Carregar séries em destaque
-                const seriesResponse = await fetch('/api/series/featured', {
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                const container = document.getElementById('featuredMovies');
+                if (movies.length === 0) {
+                    container.innerHTML = `
+                        <div class="col-12 text-center">
+                            <p>Nenhum filme em destaque disponível no momento.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                container.innerHTML = movies.map(movie => {
+                    // Tratar o campo genre que pode vir como string JSON
+                    let genres = [];
+                    if (typeof movie.genre === 'string') {
+                        try {
+                            genres = JSON.parse(movie.genre);
+                        } catch (e) {
+                            genres = [movie.genre];
+                        }
+                    } else if (Array.isArray(movie.genre)) {
+                        genres = movie.genre;
                     }
-                });
-                const series = await seriesResponse.json();
-                renderContent('featuredSeries', series, 'series');
+                    
+                    return `
+                        <div class="col-md-3 mb-4">
+                            <div class="card">
+                                <img src="${movie.posterUrl || 'https://via.placeholder.com/300x450?text=Sem+Imagem'}" alt="${movie.title}">
+                                <div class="card-body">
+                                    <h5 class="card-title">${movie.title}</h5>
+                                    <p class="card-text">${movie.description ? movie.description.substring(0, 100) + '...' : 'Descrição não disponível'}</p>
+                                    <div>
+                                        <span class="badge">${genres.length > 0 ? genres.join(', ') : 'Gênero não especificado'}</span>
+                                        <span class="badge">${movie.releaseYear || 'Ano não especificado'}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
             } catch (error) {
-                console.error('Erro ao carregar conteúdo em destaque:', error);
+                console.error('Erro ao carregar filmes:', error);
+                const container = document.getElementById('featuredMovies');
+                container.innerHTML = `
+                    <div class="col-12 text-center">
+                        <p>Não foi possível carregar os filmes em destaque. Por favor, tente novamente mais tarde.</p>
+                    </div>
+                `;
             }
         }
 
-        // Renderizar conteúdo
-        function renderContent(containerId, items, type) {
-            const container = document.getElementById(containerId);
-            container.innerHTML = items.map(item => `
-                <div class="content-card">
-                    <img src="${item.posterUrl}" alt="${item.title}" class="content-image">
-                    <div class="content-info">
-                        <h3 class="content-title">${item.title}</h3>
-                        <div class="content-meta">
-                            <span><i class="fas fa-star"></i> ${item.rating.toFixed(1)}</span>
-                            <span><i class="fas fa-calendar"></i> ${item.releaseYear}</span>
-                            ${type === 'movie' ? `<span><i class="fas fa-clock"></i> ${item.duration} min</span>` : `<span><i class="fas fa-film"></i> ${item.seasons} temporadas</span>`}
+        // Carregar séries em destaque
+        async function loadFeaturedSeries() {
+            try {
+                const response = await fetch('/api/series/featured');
+                if (!response.ok) {
+                    throw new Error(`Erro ao carregar séries: ${response.status}`);
+                }
+                const series = await response.json();
+
+                const container = document.getElementById('featuredSeries');
+                if (series.length === 0) {
+                    container.innerHTML = `
+                        <div class="col-12 text-center">
+                            <p>Nenhuma série em destaque disponível no momento.</p>
                         </div>
-                        <div class="content-badges">
-                            ${item.genre.map(g => `<span class="badge">${g}</span>`).join('')}
+                    `;
+                    return;
+                }
+                
+                container.innerHTML = series.map(series => {
+                    // Tratar o campo genre que pode vir como string JSON
+                    let genres = [];
+                    if (typeof series.genre === 'string') {
+                        try {
+                            genres = JSON.parse(series.genre);
+                        } catch (e) {
+                            genres = [series.genre];
+                        }
+                    } else if (Array.isArray(series.genre)) {
+                        genres = series.genre;
+                    }
+                    
+                    return `
+                        <div class="col-md-3 mb-4">
+                            <div class="card">
+                                <img src="${series.posterUrl || 'https://via.placeholder.com/300x450?text=Sem+Imagem'}" alt="${series.title}">
+                                <div class="card-body">
+                                    <h5 class="card-title">${series.title}</h5>
+                                    <p class="card-text">${series.description ? series.description.substring(0, 100) + '...' : 'Descrição não disponível'}</p>
+                                    <div>
+                                        <span class="badge">${genres.length > 0 ? genres.join(', ') : 'Gênero não especificado'}</span>
+                                        <span class="badge">${series.releaseYear || 'Ano não especificado'}</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <a href="/${type}-details?id=${item._id}" class="btn btn-details">
-                            Ver Detalhes
-                        </a>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error('Erro ao carregar séries:', error);
+                const container = document.getElementById('featuredSeries');
+                container.innerHTML = `
+                    <div class="col-12 text-center">
+                        <p>Não foi possível carregar as séries em destaque. Por favor, tente novamente mais tarde.</p>
                     </div>
-                </div>
-            `).join('');
+                `;
+            }
         }
 
         // Navbar scroll effect
@@ -641,7 +537,11 @@
         });
 
         // Inicializar
+        console.log('Inicializando a página...');
         checkAuth();
+        loadFeaturedMovies();
+        loadFeaturedSeries();
+        console.log('Página inicializada com sucesso!');
     </script>
 </body>
 </html> 

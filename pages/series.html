@@ -321,26 +321,30 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="/">Início</a>
+                        <a class="nav-link" href="index.html">Início</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/movies">Filmes</a>
+                        <a class="nav-link" href="movies.html">Filmes</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="/series">Séries</a>
+                        <a class="nav-link active" href="series.html">Séries</a>
                     </li>
                 </ul>
-                <div class="user-menu">
+                <div class="user-menu" id="userMenu" style="display: none;">
                     <button class="btn btn-link text-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
                         <i class="fas fa-user-circle"></i>
                         <span id="userName">Usuário</span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="/profile">Meu Perfil</a></li>
-                        <li><a class="dropdown-item" href="/watchlist">Minha Lista</a></li>
+                        <li><a class="dropdown-item" href="profile.html">Meu Perfil</a></li>
+                        <li><a class="dropdown-item" href="watchlist.html">Minha Lista</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="#" id="logoutBtn">Sair</a></li>
                     </ul>
+                </div>
+                <div id="authButtons">
+                    <a href="login.html" class="btn btn-outline-light me-2">Entrar</a>
+                    <a href="register.html" class="btn btn-primary">Criar Conta</a>
                 </div>
             </div>
         </div>
@@ -425,29 +429,14 @@
 
         // Verificar autenticação
         function checkAuth() {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                window.location.href = '/login';
-                return;
-            }
-            fetchUserInfo();
+            // Temporariamente removendo a verificação de autenticação
             loadSeries();
         }
 
         // Buscar informações do usuário
         async function fetchUserInfo() {
-            try {
-                const response = await fetch('/api/auth/me', {
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    }
-                });
-                const user = await response.json();
-                document.getElementById('userName').textContent = user.name;
-            } catch (error) {
-                console.error('Erro ao buscar informações do usuário:', error);
-                window.location.href = '/login';
-            }
+            // Temporariamente removendo a busca de informações do usuário
+            document.getElementById('userName').textContent = 'Usuário';
         }
 
         // Logout
@@ -467,11 +456,11 @@
                     year: state.filters.year
                 });
 
-                const response = await fetch(`/api/series?${queryParams}`, {
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    }
-                });
+                const response = await fetch(`/api/series?${queryParams}`);
+                if (!response.ok) {
+                    throw new Error(`Erro ao carregar séries: ${response.status}`);
+                }
+                
                 const data = await response.json();
 
                 state.totalPages = data.totalPages;
@@ -479,6 +468,16 @@
                 updatePagination();
             } catch (error) {
                 console.error('Erro ao carregar séries:', error);
+                const container = document.getElementById('seriesGrid');
+                const emptyState = document.getElementById('emptyState');
+                
+                container.style.display = 'none';
+                emptyState.style.display = 'block';
+                emptyState.innerHTML = `
+                    <i class="fas fa-exclamation-circle"></i>
+                    <h3>Erro ao carregar séries</h3>
+                    <p>Não foi possível carregar as séries. Por favor, tente novamente mais tarde.</p>
+                `;
             }
         }
 
@@ -496,26 +495,40 @@
             container.style.display = 'grid';
             emptyState.style.display = 'none';
 
-            container.innerHTML = series.map(series => `
-                <div class="series-card">
-                    <img src="${series.posterUrl}" alt="${series.title}" class="series-image">
-                    <div class="series-info">
-                        <h3 class="series-title">${series.title}</h3>
-                        <div class="series-meta">
-                            <span><i class="fas fa-star"></i> ${series.rating.toFixed(1)}</span>
-                            <span><i class="fas fa-calendar"></i> ${series.releaseYear}</span>
-                            <span><i class="fas fa-film"></i> ${series.seasons} temporadas</span>
+            container.innerHTML = series.map(series => {
+                // Tratar o campo genre que pode vir como string JSON
+                let genres = [];
+                if (typeof series.genre === 'string') {
+                    try {
+                        genres = JSON.parse(series.genre);
+                    } catch (e) {
+                        genres = [series.genre];
+                    }
+                } else if (Array.isArray(series.genre)) {
+                    genres = series.genre;
+                }
+                
+                return `
+                    <div class="series-card">
+                        <img src="${series.posterUrl || 'https://via.placeholder.com/300x450?text=Sem+Imagem'}" alt="${series.title}" class="series-image">
+                        <div class="series-info">
+                            <h3 class="series-title">${series.title}</h3>
+                            <div class="series-meta">
+                                <span><i class="fas fa-star"></i> ${series.rating ? series.rating.toFixed(1) : '0.0'}</span>
+                                <span><i class="fas fa-calendar"></i> ${series.releaseYear || 'Ano não especificado'}</span>
+                                <span><i class="fas fa-film"></i> ${series.episodes ? series.episodes.length : '0'} episódios</span>
+                            </div>
+                            <div class="series-badges">
+                                ${genres.length > 0 ? genres.map(g => `<span class="badge">${g}</span>`).join('') : ''}
+                            </div>
+                            <p class="series-description">${series.description ? series.description.substring(0, 150) + '...' : 'Descrição não disponível'}</p>
+                            <a href="/series-details?id=${series.id}" class="btn btn-details">
+                                Ver Detalhes
+                            </a>
                         </div>
-                        <div class="series-badges">
-                            ${series.genre.map(g => `<span class="badge">${g}</span>`).join('')}
-                        </div>
-                        <p class="series-description">${series.description}</p>
-                        <a href="/series-details?id=${series._id}" class="btn btn-details">
-                            Ver Detalhes
-                        </a>
                     </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         // Atualizar paginação
