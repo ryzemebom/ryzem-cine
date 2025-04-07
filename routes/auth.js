@@ -1,61 +1,60 @@
-const router = require('express').Router();
+const express = require('express');
+const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
-// Registro de usuário
+// Rota de registro
 router.post('/register', async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
     // Verificar se o usuário já existe
-    let user = await User.findOne({ email });
-    if (user) {
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
       return res.status(400).json({ message: 'Usuário já existe' });
     }
 
+    // Hash da senha
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
     // Criar novo usuário
-    user = new User({
+    const user = await User.create({
       name,
       email,
-      password
+      password: hashedPassword
     });
 
-    // Criptografar senha
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(password, salt);
-
-    await user.save();
-
-    // Criar token JWT
-    const payload = {
-      user: {
-        id: user.id
-      }
-    };
-
-    jwt.sign(
-      payload,
-      process.env.JWT_SECRET || 'secret',
-      { expiresIn: '24h' },
-      (err, token) => {
-        if (err) throw err;
-        res.json({ token });
-      }
+    // Gerar token JWT
+    const token = jwt.sign(
+      { id: user.id },
+      process.env.JWT_SECRET || 'sua_chave_secreta',
+      { expiresIn: '1d' }
     );
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Erro no servidor');
+
+    res.status(201).json({
+      token,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        subscription: user.subscription
+      }
+    });
+  } catch (error) {
+    console.error('Erro no registro:', error);
+    res.status(500).json({ message: 'Erro no servidor' });
   }
 });
 
-// Login de usuário
+// Rota de login
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
     // Verificar se o usuário existe
-    let user = await User.findOne({ email });
+    const user = await User.findOne({ where: { email } });
     if (!user) {
       return res.status(400).json({ message: 'Credenciais inválidas' });
     }
@@ -66,25 +65,25 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ message: 'Credenciais inválidas' });
     }
 
-    // Criar token JWT
-    const payload = {
-      user: {
-        id: user.id
-      }
-    };
-
-    jwt.sign(
-      payload,
-      process.env.JWT_SECRET || 'secret',
-      { expiresIn: '24h' },
-      (err, token) => {
-        if (err) throw err;
-        res.json({ token });
-      }
+    // Gerar token JWT
+    const token = jwt.sign(
+      { id: user.id },
+      process.env.JWT_SECRET || 'sua_chave_secreta',
+      { expiresIn: '1d' }
     );
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Erro no servidor');
+
+    res.json({
+      token,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        subscription: user.subscription
+      }
+    });
+  } catch (error) {
+    console.error('Erro no login:', error);
+    res.status(500).json({ message: 'Erro no servidor' });
   }
 });
 

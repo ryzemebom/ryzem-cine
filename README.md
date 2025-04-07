@@ -1,22 +1,22 @@
-# Ryzem Cine - Sistema de Streaming
+# Ryzem Cine - Plataforma de Streaming
 
-Um sistema de streaming de filmes e séries similar ao Netflix, desenvolvido com React, Node.js e MongoDB.
+Uma plataforma de streaming de filmes e séries desenvolvida com Node.js, Express e SQLite.
 
-## Funcionalidades
+## 🚀 Funcionalidades
 
-- Cadastro e login de usuários
+- Autenticação de usuários (registro/login)
 - Listagem de filmes e séries
-- Interface moderna e responsiva
-- Sistema de autenticação com JWT
-- Diferenciação entre conteúdo gratuito e premium
+- Detalhes de filmes e séries
+- Sistema de assinatura (gratuito/premium)
+- Lista de favoritos
+- Player de vídeo integrado
 
-## Requisitos
+## 📋 Pré-requisitos
 
-- Node.js (v14 ou superior)
-- MongoDB
-- NPM ou Yarn
+- Node.js (versão 14 ou superior)
+- NPM (gerenciador de pacotes do Node)
 
-## Instalação
+## 🔧 Instalação
 
 1. Clone o repositório:
 ```bash
@@ -24,72 +24,64 @@ git clone https://github.com/seu-usuario/ryzem-cine.git
 cd ryzem-cine
 ```
 
-2. Instale as dependências do backend:
+2. Instale as dependências:
 ```bash
 npm install
 ```
 
-3. Instale as dependências do frontend:
+3. Configure as variáveis de ambiente:
+Crie um arquivo `.env` na raiz do projeto com:
+```
+PORT=3000
+JWT_SECRET=sua_chave_secreta
+```
+
+4. Inicie o servidor:
 ```bash
-cd client
-npm install
-```
-
-4. Crie um arquivo .env na raiz do projeto com as seguintes variáveis:
-```
-MONGODB_URI=sua_url_do_mongodb
-JWT_SECRET=seu_segredo_jwt
-PORT=5000
-```
-
-## Executando o projeto
-
-1. Inicie o servidor backend:
-```bash
-npm run dev
-```
-
-2. Em outro terminal, inicie o frontend:
-```bash
-cd client
 npm start
 ```
 
-3. Acesse o sistema em `http://localhost:3000`
+## 🌐 Acesso
 
-## Estrutura do Projeto
+- Frontend: http://localhost:3000
+- API: http://localhost:3000/api
+
+## 📁 Estrutura do Projeto
 
 ```
 ryzem-cine/
-├── client/                 # Frontend React
-│   ├── src/
-│   │   ├── components/    # Componentes React
-│   │   ├── App.js
-│   │   └── index.js
-│   └── package.json
-├── models/                # Modelos MongoDB
-├── routes/               # Rotas da API
-├── middleware/          # Middlewares
-├── server.js           # Servidor Express
-└── package.json
+├── config/             # Configurações do banco de dados
+├── middleware/         # Middlewares (autenticação, etc)
+├── models/            # Modelos do banco de dados
+├── pages/             # Páginas HTML do frontend
+├── routes/            # Rotas da API
+├── .env              # Variáveis de ambiente
+├── package.json      # Dependências e scripts
+└── server.js         # Arquivo principal do servidor
 ```
 
-## Tecnologias Utilizadas
+## 🔐 Rotas da API
 
-- Frontend:
-  - React
-  - Material-UI
-  - Axios
-  - React Router
+### Autenticação
+- POST /api/auth/register - Registro de usuário
+- POST /api/auth/login - Login de usuário
 
-- Backend:
-  - Node.js
-  - Express
-  - MongoDB
-  - JWT
-  - Bcrypt
+### Filmes
+- GET /api/movies - Lista todos os filmes
+- GET /api/movies/:id - Obtém detalhes de um filme
+- POST /api/movies - Cria um novo filme (admin)
+- PUT /api/movies/:id - Atualiza um filme (admin)
+- DELETE /api/movies/:id - Remove um filme (admin)
 
-## Contribuição
+### Séries
+- GET /api/series - Lista todas as séries
+- GET /api/series/:id - Obtém detalhes de uma série
+- POST /api/series - Cria uma nova série (admin)
+- PUT /api/series/:id - Atualiza uma série (admin)
+- DELETE /api/series/:id - Remove uma série (admin)
+- POST /api/series/:id/episodes - Adiciona um episódio (admin)
+
+## 👥 Contribuição
 
 1. Faça um fork do projeto
 2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
@@ -97,6 +89,6 @@ ryzem-cine/
 4. Push para a branch (`git push origin feature/AmazingFeature`)
 5. Abra um Pull Request
 
-## Licença
+## 📝 Licença
 
-Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes. 
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes. 

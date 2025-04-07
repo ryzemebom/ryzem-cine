@@ -1,42 +1,52 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
 
-const movieSchema = new mongoose.Schema({
+const Movie = sequelize.define('Movie', {
   title: {
-    type: String,
-    required: true
+    type: DataTypes.STRING,
+    allowNull: false
   },
   description: {
-    type: String,
-    required: true
+    type: DataTypes.TEXT,
+    allowNull: false
   },
   releaseYear: {
-    type: Number,
-    required: true
+    type: DataTypes.INTEGER,
+    allowNull: false
   },
-  genre: [{
-    type: String,
-    required: true
-  }],
+  genre: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+    get() {
+      const rawValue = this.getDataValue('genre');
+      return JSON.parse(rawValue);
+    },
+    set(value) {
+      this.setDataValue('genre', JSON.stringify(value));
+    }
+  },
   duration: {
-    type: Number,
-    required: true
+    type: DataTypes.INTEGER,
+    allowNull: false
   },
   rating: {
-    type: Number,
-    default: 0
+    type: DataTypes.FLOAT,
+    defaultValue: 0
   },
   posterUrl: {
-    type: String,
-    required: true
+    type: DataTypes.STRING,
+    allowNull: false
   },
   videoUrl: {
-    type: String,
-    required: true
+    type: DataTypes.STRING,
+    allowNull: false
   },
   isPremium: {
-    type: Boolean,
-    default: false
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
   }
+}, {
+  timestamps: true
 });
 
-module.exports = mongoose.model('Movie', movieSchema); 
+module.exports = Movie; 

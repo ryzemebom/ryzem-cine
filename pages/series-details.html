@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes da Série - Ryzem Cine</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #141414;
+            color: white;
+        }
+        .navbar {
+            background-color: rgba(0, 0, 0, 0.9) !important;
+        }
+        .series-header {
+            position: relative;
+            height: 70vh;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: flex-end;
+            padding-bottom: 2rem;
+        }
+        .series-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.9) 100%);
+        }
+        .series-info {
+            position: relative;
+            z-index: 1;
+        }
+        .btn-primary {
+            background-color: #e50914;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #f40612;
+        }
+        .btn-outline-light {
+            border: 1px solid white;
+        }
+        .btn-outline-light:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .episode-card {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+        .episode-card:hover {
+            transform: scale(1.02);
+        }
+        .episode-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        .cast-card {
+            text-align: center;
+        }
+        .cast-card img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 1rem;
+        }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            display: none;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html">Ryzem Cine</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../index.html#filmes">Filmes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../index.html#series">Séries</a>
+                    </li>
+                    <li class="nav-item" id="loginNavItem">
+                        <a class="nav-link" href="login.html">Login</a>
+                    </li>
+                    <li class="nav-item user-menu" id="userMenu" style="display: none;">
+                        <div class="user-avatar" id="userAvatar">U</div>
+                        <div class="user-menu-content">
+                            <a href="#" class="user-menu-item" id="userName">Usuário</a>
+                            <a href="#" class="user-menu-item">Minha Lista</a>
+                            <a href="#" class="user-menu-item">Configurações</a>
+                            <a href="#" class="user-menu-item" id="logoutButton">Sair</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Series Header -->
+    <header class="series-header" id="seriesHeader">
+        <div class="container series-info">
+            <h1 class="display-4 fw-bold" id="seriesTitle">Título da Série</h1>
+            <div class="d-flex align-items-center mb-3">
+                <span class="me-3" id="seriesYear">2024</span>
+                <span class="me-3" id="seriesSeasons">1 Temporada</span>
+                <span class="me-3" id="seriesGenre">Gênero</span>
+                <span><i class="fas fa-star text-warning"></i> <span id="seriesRating">0.0</span></span>
+            </div>
+            <p class="lead" id="seriesDescription">Descrição da série...</p>
+            <div class="d-flex gap-2">
+                <button class="btn btn-primary btn-lg" id="playButton">
+                    <i class="fas fa-play me-2"></i> Assistir
+                </button>
+                <button class="btn btn-outline-light btn-lg" id="addToListButton">
+                    <i class="fas fa-plus me-2"></i> Minha Lista
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Video Player -->
+    <div class="container mt-4">
+        <div class="video-container" id="videoPlayer">
+            <iframe src="" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <!-- Episodes Section -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="mb-4">Episódios</h2>
+            <div class="row" id="episodesContainer">
+                <!-- Episodes will be loaded dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Cast Section -->
+    <section class="py-5 bg-dark">
+        <div class="container">
+            <h2 class="mb-4">Elenco</h2>
+            <div class="row" id="castContainer">
+                <!-- Cast members will be loaded dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Verificar se o usuário está logado
+        function checkAuthStatus() {
+            const token = localStorage.getItem('token');
+            const loginNavItem = document.getElementById('loginNavItem');
+            const userMenu = document.getElementById('userMenu');
+            
+            if (token) {
+                loginNavItem.style.display = 'none';
+                userMenu.style.display = 'block';
+                fetchUserInfo();
+            } else {
+                loginNavItem.style.display = 'block';
+                userMenu.style.display = 'none';
+            }
+        }
+
+        // Obter informações do usuário
+        async function fetchUserInfo() {
+            const token = localStorage.getItem('token');
+            try {
+                const response = await fetch('/api/auth/me', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const user = await response.json();
+                    document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
+                    document.getElementById('userName').textContent = user.name;
+                }
+            } catch (error) {
+                console.error('Erro ao obter informações do usuário:', error);
+            }
+        }
+
+        // Configurar o botão de logout
+        document.getElementById('logoutButton').addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('token');
+            window.location.reload();
+        });
+
+        // Carregar detalhes da série
+        async function loadSeriesDetails() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const seriesId = urlParams.get('id');
+
+            if (!seriesId) {
+                window.location.href = '../index.html';
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/series/${seriesId}`);
+                if (!response.ok) {
+                    throw new Error('Erro ao carregar detalhes da série');
+                }
+
+                const series = await response.json();
+                
+                // Atualizar o cabeçalho
+                document.getElementById('seriesHeader').style.backgroundImage = `url(${series.posterUrl})`;
+                document.getElementById('seriesTitle').textContent = series.title;
+                document.getElementById('seriesYear').textContent = series.year;
+                document.getElementById('seriesSeasons').textContent = `${series.seasons} Temporada${series.seasons > 1 ? 's' : ''}`;
+                document.getElementById('seriesGenre').textContent = series.genre.join(', ');
+                document.getElementById('seriesRating').textContent = series.rating.toFixed(1);
+                document.getElementById('seriesDescription').textContent = series.description;
+
+                // Carregar episódios
+                const episodesContainer = document.getElementById('episodesContainer');
+                series.episodes.forEach(episode => {
+                    const episodeCard = document.createElement('div');
+                    episodeCard.className = 'col-md-4 mb-4';
+                    episodeCard.innerHTML = `
+                        <div class="episode-card">
+                            <img src="${episode.thumbnailUrl}" alt="${episode.title}">
+                            <div class="p-3">
+                                <h5>${episode.title}</h5>
+                                <p class="mb-2">${episode.description}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span>Episódio ${episode.number}</span>
+                                    <span>${episode.duration} min</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    episodesContainer.appendChild(episodeCard);
+                });
+
+                // Carregar elenco
+                const castContainer = document.getElementById('castContainer');
+                series.cast.forEach(member => {
+                    const castCard = document.createElement('div');
+                    castCard.className = 'col-md-3 mb-4';
+                    castCard.innerHTML = `
+                        <div class="cast-card">
+                            <img src="${member.photoUrl}" alt="${member.name}">
+                            <h5>${member.name}</h5>
+                            <p class="text-muted">${member.character}</p>
+                        </div>
+                    `;
+                    castContainer.appendChild(castCard);
+                });
+
+            } catch (error) {
+                console.error('Erro ao carregar detalhes da série:', error);
+                // Adicionar conteúdo de exemplo em caso de erro
+                addExampleContent();
+            }
+        }
+
+        // Adicionar conteúdo de exemplo
+        function addExampleContent() {
+            const episodesContainer = document.getElementById('episodesContainer');
+            const castContainer = document.getElementById('castContainer');
+
+            // Episódios de exemplo
+            const exampleEpisodes = [
+                { title: 'Episódio 1', description: 'Descrição do episódio 1', number: 1, duration: 45, thumbnailUrl: 'https://source.unsplash.com/random/300x200/?tv' },
+                { title: 'Episódio 2', description: 'Descrição do episódio 2', number: 2, duration: 42, thumbnailUrl: 'https://source.unsplash.com/random/300x200/?series' },
+                { title: 'Episódio 3', description: 'Descrição do episódio 3', number: 3, duration: 48, thumbnailUrl: 'https://source.unsplash.com/random/300x200/?show' }
+            ];
+
+            exampleEpisodes.forEach(episode => {
+                const episodeCard = document.createElement('div');
+                episodeCard.className = 'col-md-4 mb-4';
+                episodeCard.innerHTML = `
+                    <div class="episode-card">
+                        <img src="${episode.thumbnailUrl}" alt="${episode.title}">
+                        <div class="p-3">
+                            <h5>${episode.title}</h5>
+                            <p class="mb-2">${episode.description}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Episódio ${episode.number}</span>
+                                <span>${episode.duration} min</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                episodesContainer.appendChild(episodeCard);
+            });
+
+            // Elenco de exemplo
+            const exampleCast = [
+                { name: 'Ator 1', character: 'Personagem 1', photoUrl: 'https://source.unsplash.com/random/120x120/?person' },
+                { name: 'Ator 2', character: 'Personagem 2', photoUrl: 'https://source.unsplash.com/random/120x120/?actor' },
+                { name: 'Ator 3', character: 'Personagem 3', photoUrl: 'https://source.unsplash.com/random/120x120/?celebrity' },
+                { name: 'Ator 4', character: 'Personagem 4', photoUrl: 'https://source.unsplash.com/random/120x120/?star' }
+            ];
+
+            exampleCast.forEach(member => {
+                const castCard = document.createElement('div');
+                castCard.className = 'col-md-3 mb-4';
+                castCard.innerHTML = `
+                    <div class="cast-card">
+                        <img src="${member.photoUrl}" alt="${member.name}">
+                        <h5>${member.name}</h5>
+                        <p class="text-muted">${member.character}</p>
+                    </div>
+                `;
+                castContainer.appendChild(castCard);
+            });
+        }
+
+        // Configurar o botão de play
+        document.getElementById('playButton').addEventListener('click', () => {
+            const videoPlayer = document.getElementById('videoPlayer');
+            const iframe = videoPlayer.querySelector('iframe');
+            
+            if (videoPlayer.style.display === 'none') {
+                videoPlayer.style.display = 'block';
+                iframe.src = 'https://www.youtube.com/embed/dQw4w9WgXcQ'; // URL de exemplo
+                document.getElementById('playButton').innerHTML = '<i class="fas fa-pause me-2"></i> Pausar';
+            } else {
+                videoPlayer.style.display = 'none';
+                iframe.src = '';
+                document.getElementById('playButton').innerHTML = '<i class="fas fa-play me-2"></i> Assistir';
+            }
+        });
+
+        // Configurar o botão de adicionar à lista
+        document.getElementById('addToListButton').addEventListener('click', async () => {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const seriesId = urlParams.get('id');
+
+            try {
+                const response = await fetch('/api/watchlist/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ seriesId })
+                });
+
+                if (response.ok) {
+                    alert('Série adicionada à sua lista!');
+                } else {
+                    throw new Error('Erro ao adicionar à lista');
+                }
+            } catch (error) {
+                console.error('Erro ao adicionar à lista:', error);
+                alert('Erro ao adicionar à lista. Tente novamente mais tarde.');
+            }
+        });
+
+        // Inicializar a página
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuthStatus();
+            loadSeriesDetails();
+        });
+    </script>
+</body>
+</html> 

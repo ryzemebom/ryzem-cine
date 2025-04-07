@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ryzem Cine - Streaming de Filmes e Séries</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #141414;
+            color: white;
+        }
+        .navbar {
+            background-color: rgba(0, 0, 0, 0.9) !important;
+        }
+        .hero-section {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://source.unsplash.com/random/1920x1080/?movie') no-repeat center center;
+            background-size: cover;
+            height: 80vh;
+            display: flex;
+            align-items: center;
+        }
+        .movie-card {
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+        .movie-card:hover {
+            transform: scale(1.05);
+        }
+        .movie-card img {
+            height: 300px;
+            object-fit: cover;
+        }
+        .btn-primary {
+            background-color: #e50914;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #f40612;
+        }
+        .btn-outline-light {
+            border: 1px solid white;
+        }
+        .btn-outline-light:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .section-title {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: #e50914;
+        }
+        .user-menu {
+            position: relative;
+        }
+        .user-menu-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 4px;
+        }
+        .user-menu:hover .user-menu-content {
+            display: block;
+        }
+        .user-menu-item {
+            padding: 10px 15px;
+            color: white;
+            text-decoration: none;
+            display: block;
+        }
+        .user-menu-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #e50914;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">Ryzem Cine</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#filmes">Filmes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#series">Séries</a>
+                    </li>
+                    <li class="nav-item" id="loginNavItem">
+                        <a class="nav-link" href="pages/login.html">Login</a>
+                    </li>
+                    <li class="nav-item user-menu" id="userMenu" style="display: none;">
+                        <div class="user-avatar" id="userAvatar">U</div>
+                        <div class="user-menu-content">
+                            <a href="#" class="user-menu-item" id="userName">Usuário</a>
+                            <a href="#" class="user-menu-item">Minha Lista</a>
+                            <a href="#" class="user-menu-item">Configurações</a>
+                            <a href="#" class="user-menu-item" id="logoutButton">Sair</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h1 class="display-4 fw-bold">Bem-vindo ao Ryzem Cine</h1>
+                    <p class="lead">Assista aos melhores filmes e séries em um só lugar.</p>
+                    <div class="d-flex">
+                        <button class="btn btn-primary btn-lg me-2" id="startWatchingButton">Começar Agora</button>
+                        <button class="btn btn-outline-light btn-lg">Saiba Mais</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filmes Section -->
+    <section id="filmes" class="py-5">
+        <div class="container">
+            <h2 class="section-title">Filmes em Destaque</h2>
+            <div class="row" id="moviesContainer">
+                <!-- Movie cards will be loaded dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Séries Section -->
+    <section id="series" class="py-5 bg-dark">
+        <div class="container">
+            <h2 class="section-title">Séries em Destaque</h2>
+            <div class="row" id="seriesContainer">
+                <!-- Series cards will be loaded dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Ryzem Cine</h5>
+                    <p>O melhor streaming de filmes e séries.</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <p>&copy; 2024 Ryzem Cine. Todos os direitos reservados.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Verificar se o usuário está logado
+        function checkAuthStatus() {
+            const token = localStorage.getItem('token');
+            const loginNavItem = document.getElementById('loginNavItem');
+            const userMenu = document.getElementById('userMenu');
+            
+            if (token) {
+                // Usuário está logado
+                loginNavItem.style.display = 'none';
+                userMenu.style.display = 'block';
+                
+                // Obter informações do usuário
+                fetchUserInfo();
+            } else {
+                // Usuário não está logado
+                loginNavItem.style.display = 'block';
+                userMenu.style.display = 'none';
+            }
+        }
+        
+        // Obter informações do usuário
+        async function fetchUserInfo() {
+            const token = localStorage.getItem('token');
+            
+            try {
+                const response = await fetch('/api/auth/me', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const user = await response.json();
+                    
+                    // Atualizar o avatar com a primeira letra do nome
+                    const userAvatar = document.getElementById('userAvatar');
+                    userAvatar.textContent = user.name.charAt(0).toUpperCase();
+                    
+                    // Atualizar o nome do usuário
+                    const userName = document.getElementById('userName');
+                    userName.textContent = user.name;
+                }
+            } catch (error) {
+                console.error('Erro ao obter informações do usuário:', error);
+            }
+        }
+        
+        // Configurar o botão de logout
+        document.getElementById('logoutButton').addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('token');
+            window.location.reload();
+        });
+        
+        // Configurar o botão de começar a assistir
+        document.getElementById('startWatchingButton').addEventListener('click', () => {
+            const token = localStorage.getItem('token');
+            if (token) {
+                // Usuário está logado, redirecionar para a seção de filmes
+                document.getElementById('filmes').scrollIntoView({ behavior: 'smooth' });
+            } else {
+                // Usuário não está logado, redirecionar para a página de login
+                window.location.href = 'pages/login.html';
+            }
+        });
+        
+        // Carregar filmes
+        async function loadMovies() {
+            try {
+                const response = await fetch('/api/movies');
+                if (!response.ok) {
+                    throw new Error('Erro ao carregar filmes');
+                }
+                
+                const movies = await response.json();
+                const moviesContainer = document.getElementById('moviesContainer');
+                
+                movies.forEach(movie => {
+                    const movieCard = document.createElement('div');
+                    movieCard.className = 'col-md-3 mb-4';
+                    movieCard.innerHTML = `
+                        <div class="card movie-card bg-dark text-white" data-id="${movie._id}">
+                            <img src="${movie.posterUrl}" class="card-img-top" alt="${movie.title}">
+                            <div class="card-body">
+                                <h5 class="card-title">${movie.title}</h5>
+                                <p class="card-text">${movie.genre.join(', ')}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span><i class="fas fa-star text-warning"></i> ${movie.rating.toFixed(1)}</span>
+                                    <span>${movie.duration} min</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    moviesContainer.appendChild(movieCard);
+                });
+                
+                // Adicionar evento de clique aos cards de filme
+                document.querySelectorAll('.movie-card').forEach(card => {
+                    card.addEventListener('click', () => {
+                        const movieId = card.getAttribute('data-id');
+                        window.location.href = `pages/movie-details.html?id=${movieId}`;
+                    });
+                });
+                
+            } catch (error) {
+                console.error('Erro ao carregar filmes:', error);
+                // Adicionar cards de exemplo em caso de erro
+                addExampleMovies();
+            }
+        }
+        
+        // Carregar séries
+        async function loadSeries() {
+            try {
+                const response = await fetch('/api/series');
+                if (!response.ok) {
+                    throw new Error('Erro ao carregar séries');
+                }
+                
+                const series = await response.json();
+                const seriesContainer = document.getElementById('seriesContainer');
+                
+                series.forEach(show => {
+                    const seriesCard = document.createElement('div');
+                    seriesCard.className = 'col-md-3 mb-4';
+                    seriesCard.innerHTML = `
+                        <div class="card movie-card bg-dark text-white" data-id="${show._id}">
+                            <img src="${show.posterUrl}" class="card-img-top" alt="${show.title}">
+                            <div class="card-body">
+                                <h5 class="card-title">${show.title}</h5>
+                                <p class="card-text">${show.genre.join(', ')}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span><i class="fas fa-star text-warning"></i> ${show.rating.toFixed(1)}</span>
+                                    <span>${show.seasons} temporadas</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    seriesContainer.appendChild(seriesCard);
+                });
+                
+                // Adicionar evento de clique aos cards de série
+                document.querySelectorAll('#seriesContainer .movie-card').forEach(card => {
+                    card.addEventListener('click', () => {
+                        const seriesId = card.getAttribute('data-id');
+                        window.location.href = `pages/series-details.html?id=${seriesId}`;
+                    });
+                });
+                
+            } catch (error) {
+                console.error('Erro ao carregar séries:', error);
+                // Adicionar cards de exemplo em caso de erro
+                addExampleSeries();
+            }
+        }
+        
+        // Adicionar filmes de exemplo
+        function addExampleMovies() {
+            const moviesContainer = document.getElementById('moviesContainer');
+            const exampleMovies = [
+                { title: 'Filme 1', genre: ['Ação', 'Aventura'], rating: 8.5, duration: 120, posterUrl: 'https://source.unsplash.com/random/300x400/?movie' },
+                { title: 'Filme 2', genre: ['Drama', 'Suspense'], rating: 7.8, duration: 95, posterUrl: 'https://source.unsplash.com/random/300x400/?cinema' },
+                { title: 'Filme 3', genre: ['Comédia', 'Romance'], rating: 6.9, duration: 105, posterUrl: 'https://source.unsplash.com/random/300x400/?film' },
+                { title: 'Filme 4', genre: ['Ficção Científica'], rating: 8.2, duration: 150, posterUrl: 'https://source.unsplash.com/random/300x400/?movie-poster' }
+            ];
+            
+            exampleMovies.forEach(movie => {
+                const movieCard = document.createElement('div');
+                movieCard.className = 'col-md-3 mb-4';
+                movieCard.innerHTML = `
+                    <div class="card movie-card bg-dark text-white">
+                        <img src="${movie.posterUrl}" class="card-img-top" alt="${movie.title}">
+                        <div class="card-body">
+                            <h5 class="card-title">${movie.title}</h5>
+                            <p class="card-text">${movie.genre.join(', ')}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span><i class="fas fa-star text-warning"></i> ${movie.rating}</span>
+                                <span>${movie.duration} min</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                moviesContainer.appendChild(movieCard);
+            });
+        }
+        
+        // Adicionar séries de exemplo
+        function addExampleSeries() {
+            const seriesContainer = document.getElementById('seriesContainer');
+            const exampleSeries = [
+                { title: 'Série 1', genre: ['Drama', 'Crime'], rating: 9.1, seasons: 5, posterUrl: 'https://source.unsplash.com/random/300x400/?tv-series' },
+                { title: 'Série 2', genre: ['Suspense', 'Mistério'], rating: 8.7, seasons: 3, posterUrl: 'https://source.unsplash.com/random/300x400/?tv-show' },
+                { title: 'Série 3', genre: ['Ação', 'Aventura'], rating: 8.3, seasons: 4, posterUrl: 'https://source.unsplash.com/random/300x400/?series' },
+                { title: 'Série 4', genre: ['Comédia', 'Drama'], rating: 7.9, seasons: 2, posterUrl: 'https://source.unsplash.com/random/300x400/?tv' }
+            ];
+            
+            exampleSeries.forEach(show => {
+                const seriesCard = document.createElement('div');
+                seriesCard.className = 'col-md-3 mb-4';
+                seriesCard.innerHTML = `
+                    <div class="card movie-card bg-dark text-white">
+                        <img src="${show.posterUrl}" class="card-img-top" alt="${show.title}">
+                        <div class="card-body">
+                            <h5 class="card-title">${show.title}</h5>
+                            <p class="card-text">${show.genre.join(', ')}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span><i class="fas fa-star text-warning"></i> ${show.rating}</span>
+                                <span>${show.seasons} temporadas</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                seriesContainer.appendChild(seriesCard);
+            });
+        }
+        
+        // Inicializar a página
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuthStatus();
+            loadMovies();
+            loadSeries();
+        });
+    </script>
+</body>
+</html> 

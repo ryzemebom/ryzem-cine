@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Filme - Ryzem Cine</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #141414;
+            color: white;
+        }
+        .navbar {
+            background-color: rgba(0, 0, 0, 0.9) !important;
+        }
+        .movie-header {
+            position: relative;
+            height: 70vh;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: flex-end;
+        }
+        .movie-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 60%, rgba(0,0,0,0.8) 100%);
+            z-index: 1;
+        }
+        .movie-info {
+            position: relative;
+            z-index: 2;
+            padding: 2rem 0;
+        }
+        .movie-title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        .movie-meta {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .movie-meta span {
+            margin-right: 1rem;
+        }
+        .movie-rating {
+            color: #ffd700;
+        }
+        .btn-play {
+            background-color: #e50914;
+            border: none;
+            padding: 0.5rem 2rem;
+            font-size: 1.2rem;
+            margin-right: 1rem;
+        }
+        .btn-play:hover {
+            background-color: #f40612;
+        }
+        .btn-outline-light {
+            border: 1px solid white;
+        }
+        .btn-outline-light:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .movie-description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 */
+            height: 0;
+            overflow: hidden;
+            margin-top: 2rem;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .cast-section {
+            margin-top: 3rem;
+        }
+        .cast-card {
+            background-color: #222;
+            border-radius: 5px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        .cast-card:hover {
+            transform: scale(1.05);
+        }
+        .cast-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .cast-info {
+            padding: 1rem;
+        }
+        .cast-name {
+            font-weight: bold;
+        }
+        .cast-role {
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">Ryzem Cine</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/#filmes">Filmes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/#series">Séries</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/pages/login.html">Login</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Movie Header -->
+    <div class="movie-header" id="movieHeader">
+        <div class="container movie-info">
+            <h1 class="movie-title" id="movieTitle">Carregando...</h1>
+            <div class="movie-meta">
+                <span id="movieYear">2024</span>
+                <span id="movieDuration">2h 30min</span>
+                <span id="movieGenre">Ação, Aventura</span>
+                <span class="movie-rating"><i class="fas fa-star"></i> <span id="movieRating">8.5</span></span>
+            </div>
+            <div class="d-flex mb-4">
+                <button class="btn btn-primary btn-play" id="playButton">
+                    <i class="fas fa-play me-2"></i> Assistir
+                </button>
+                <button class="btn btn-outline-light" id="addToListButton">
+                    <i class="fas fa-plus me-2"></i> Minha Lista
+                </button>
+            </div>
+            <p class="movie-description" id="movieDescription">
+                Carregando descrição...
+            </p>
+        </div>
+    </div>
+
+    <!-- Video Player (inicialmente oculto) -->
+    <div class="container mt-4" id="videoContainer" style="display: none;">
+        <div class="video-container">
+            <iframe id="videoPlayer" src="" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <!-- Cast Section -->
+    <div class="container cast-section">
+        <h2 class="mb-4">Elenco</h2>
+        <div class="row" id="castContainer">
+            <!-- Cast cards will be added here dynamically -->
+        </div>
+    </div>
+
+    <script>
+        // Função para obter o ID do filme da URL
+        function getMovieIdFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('id');
+        }
+
+        // Função para carregar os detalhes do filme
+        async function loadMovieDetails() {
+            const movieId = getMovieIdFromUrl();
+            if (!movieId) {
+                window.location.href = '/';
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/movies/${movieId}`);
+                if (!response.ok) {
+                    throw new Error('Filme não encontrado');
+                }
+
+                const movie = await response.json();
+                
+                // Atualizar o cabeçalho com a imagem de fundo
+                document.getElementById('movieHeader').style.backgroundImage = `url(${movie.posterUrl})`;
+                
+                // Atualizar as informações do filme
+                document.getElementById('movieTitle').textContent = movie.title;
+                document.getElementById('movieYear').textContent = movie.releaseYear;
+                document.getElementById('movieDuration').textContent = `${movie.duration} min`;
+                document.getElementById('movieGenre').textContent = movie.genre.join(', ');
+                document.getElementById('movieRating').textContent = movie.rating.toFixed(1);
+                document.getElementById('movieDescription').textContent = movie.description;
+                
+                // Configurar o botão de play
+                document.getElementById('playButton').addEventListener('click', () => {
+                    document.getElementById('videoContainer').style.display = 'block';
+                    document.getElementById('videoPlayer').src = movie.videoUrl;
+                    document.getElementById('playButton').textContent = 'Assistindo...';
+                });
+                
+                // Configurar o botão de adicionar à lista
+                document.getElementById('addToListButton').addEventListener('click', async () => {
+                    const token = localStorage.getItem('token');
+                    if (!token) {
+                        window.location.href = '/pages/login.html';
+                        return;
+                    }
+                    
+                    try {
+                        const response = await fetch('/api/movies/watchlist', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}`
+                            },
+                            body: JSON.stringify({ movieId })
+                        });
+                        
+                        if (response.ok) {
+                            alert('Filme adicionado à sua lista!');
+                        } else {
+                            const data = await response.json();
+                            alert(data.message || 'Erro ao adicionar à lista');
+                        }
+                    } catch (error) {
+                        alert('Erro ao conectar com o servidor');
+                    }
+                });
+                
+                // Carregar elenco (exemplo estático)
+                const castContainer = document.getElementById('castContainer');
+                const castMembers = [
+                    { name: 'Ator 1', role: 'Personagem Principal', image: 'https://source.unsplash.com/random/200x200/?actor' },
+                    { name: 'Atriz 1', role: 'Personagem Secundário', image: 'https://source.unsplash.com/random/200x200/?actress' },
+                    { name: 'Ator 2', role: 'Vilão', image: 'https://source.unsplash.com/random/200x200/?actor' },
+                    { name: 'Atriz 2', role: 'Personagem de Suporte', image: 'https://source.unsplash.com/random/200x200/?actress' }
+                ];
+                
+                castMembers.forEach(member => {
+                    const castCard = document.createElement('div');
+                    castCard.className = 'col-md-3 mb-4';
+                    castCard.innerHTML = `
+                        <div class="cast-card">
+                            <img src="${member.image}" alt="${member.name}">
+                            <div class="cast-info">
+                                <div class="cast-name">${member.name}</div>
+                                <div class="cast-role">${member.role}</div>
+                            </div>
+                        </div>
+                    `;
+                    castContainer.appendChild(castCard);
+                });
+                
+            } catch (error) {
+                console.error('Erro ao carregar detalhes do filme:', error);
+                alert('Erro ao carregar detalhes do filme');
+            }
+        }
+
+        // Carregar os detalhes do filme quando a página for carregada
+        document.addEventListener('DOMContentLoaded', loadMovieDetails);
+    </script>
+</body>
+</html> 
