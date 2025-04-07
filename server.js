@@ -24,6 +24,7 @@ app.use(cors({
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'pages')));
 app.use(express.static(path.join(__dirname, 'assets')));
+app.use(express.static(path.join(__dirname, 'client', 'public')));
 
 // Logging middleware
 app.use((req, res, next) => {
@@ -123,6 +124,10 @@ app.get('/movie-details', (req, res) => {
 
 app.get('/series-details', (req, res) => {
   res.sendFile(path.join(__dirname, 'pages', 'series-details.html'));
+});
+
+app.get('/admin.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'pages', 'admin.html'));
 });
 
 // Middleware de tratamento de erros

@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo - Ryzem Cine</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #e50914;
+            --secondary-color: #141414;
+            --text-color: #ffffff;
+            --hover-color: #ff0f1a;
+        }
+
+        body {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .navbar {
+            background-color: rgba(0, 0, 0, 0.9);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: background-color 0.3s;
+        }
+
+        .navbar.scrolled {
+            background-color: var(--secondary-color);
+        }
+
+        .navbar-brand {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .nav-link {
+            color: var(--text-color);
+            margin: 0 1rem;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color);
+        }
+
+        .admin-header {
+            position: relative;
+            height: 30vh;
+            background-image: url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 76px;
+        }
+
+        .admin-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), var(--secondary-color));
+        }
+
+        .admin-header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .admin-header h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .admin-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .admin-content {
+            padding: 4rem 2rem;
+        }
+
+        .admin-card {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .admin-card h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .form-label {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control, .form-select {
+            background-color: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
+
+        .form-control:focus, .form-select:focus {
+            background-color: rgba(0, 0, 0, 0.5);
+            border-color: var(--primary-color);
+            color: var(--text-color);
+            box-shadow: 0 0 0 0.25rem rgba(229, 9, 20, 0.25);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--hover-color);
+        }
+
+        .btn-outline-light {
+            border: 2px solid var(--text-color);
+            padding: 0.8rem 1.5rem;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn-outline-light:hover {
+            background-color: var(--text-color);
+            color: var(--secondary-color);
+        }
+
+        .table {
+            color: var(--text-color);
+        }
+
+        .table thead th {
+            background-color: rgba(0, 0, 0, 0.5);
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .table tbody tr {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .table tbody tr:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .badge {
+            background-color: var(--primary-color);
+            margin-right: 0.5rem;
+        }
+
+        .action-buttons .btn {
+            margin-right: 0.5rem;
+        }
+
+        .user-menu {
+            position: relative;
+        }
+
+        .user-menu .dropdown-menu {
+            background-color: rgba(0, 0, 0, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .user-menu .dropdown-item {
+            color: var(--text-color);
+        }
+
+        .user-menu .dropdown-item:hover {
+            background-color: var(--primary-color);
+        }
+
+        .nav-tabs {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-tabs .nav-link {
+            color: var(--text-color);
+            border: none;
+            border-bottom: 2px solid transparent;
+            margin-right: 1rem;
+            padding: 0.5rem 1rem;
+        }
+
+        .nav-tabs .nav-link:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .nav-tabs .nav-link.active {
+            color: var(--primary-color);
+            background-color: transparent;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .tab-content {
+            padding: 2rem 0;
+        }
+
+        .alert {
+            margin-bottom: 1rem;
+        }
+
+        .alert-success {
+            background-color: rgba(40, 167, 69, 0.2);
+            border-color: rgba(40, 167, 69, 0.3);
+            color: #75b798;
+        }
+
+        .alert-danger {
+            background-color: rgba(220, 53, 69, 0.2);
+            border-color: rgba(220, 53, 69, 0.3);
+            color: #f5c6cb;
+        }
+
+        @media (max-width: 768px) {
+            .admin-header {
+                height: 25vh;
+                margin-top: 66px;
+            }
+
+            .admin-header h1 {
+                font-size: 2rem;
+            }
+
+            .admin-header p {
+                font-size: 1rem;
+            }
+
+            .admin-card {
+                padding: 1.5rem;
+            }
+
+            .action-buttons .btn {
+                margin-bottom: 0.5rem;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="/">Ryzem Cine</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Início</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="movies.html">Filmes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="series.html">Séries</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="admin.html">Painel Admin</a>
+                    </li>
+                </ul>
+                <div class="user-menu" id="userMenu" style="display: none;">
+                    <button class="btn btn-link text-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="userName">Administrador</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="profile.html">Meu Perfil</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" id="logoutBtn">Sair</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Admin Header -->
+    <div class="admin-header">
+        <div class="admin-header-content">
+            <h1>Painel Administrativo</h1>
+            <p>Gerencie filmes e séries do Ryzem Cine</p>
+        </div>
+    </div>
+
+    <!-- Admin Content -->
+    <div class="admin-content">
+        <div class="container">
+            <!-- Tabs -->
+            <ul class="nav nav-tabs" id="adminTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="movies-tab" data-bs-toggle="tab" data-bs-target="#movies" type="button" role="tab" aria-controls="movies" aria-selected="true">
+                        <i class="fas fa-film me-2"></i>Filmes
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="series-tab" data-bs-toggle="tab" data-bs-target="#series" type="button" role="tab" aria-controls="series" aria-selected="false">
+                        <i class="fas fa-tv me-2"></i>Séries
+                    </button>
+                </li>
+            </ul>
+
+            <!-- Tab Content -->
+            <div class="tab-content" id="adminTabContent">
+                <!-- Movies Tab -->
+                <div class="tab-pane fade show active" id="movies" role="tabpanel" aria-labelledby="movies-tab">
+                    <div class="admin-card">
+                        <h2>Adicionar Novo Filme</h2>
+                        <div id="movieAlert" class="alert" style="display: none;"></div>
+                        <form id="movieForm">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="movieTitle" class="form-label">Título</label>
+                                        <input type="text" class="form-control" id="movieTitle" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="movieDescription" class="form-label">Descrição</label>
+                                        <textarea class="form-control" id="movieDescription" rows="3" required></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="movieReleaseYear" class="form-label">Ano de Lançamento</label>
+                                        <input type="number" class="form-control" id="movieReleaseYear" min="1900" max="2100" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="movieGenre" class="form-label">Gênero (separados por vírgula)</label>
+                                        <input type="text" class="form-control" id="movieGenre" placeholder="Ação, Aventura, Drama" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="movieDuration" class="form-label">Duração (minutos)</label>
+                                        <input type="number" class="form-control" id="movieDuration" min="1" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="movieRating" class="form-label">Avaliação (0-10)</label>
+                                        <input type="number" class="form-control" id="movieRating" min="0" max="10" step="0.1" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="moviePosterUrl" class="form-label">URL do Poster</label>
+                                        <input type="url" class="form-control" id="moviePosterUrl" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="movieVideoUrl" class="form-label">URL do Vídeo</label>
+                                        <input type="url" class="form-control" id="movieVideoUrl" required>
+                                    </div>
+                                    <div class="mb-3 form-check">
+                                        <input type="checkbox" class="form-check-input" id="movieIsPremium">
+                                        <label class="form-check-label" for="movieIsPremium">Conteúdo Premium</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Adicionar Filme</button>
+                        </form>
+                    </div>
+
+                    <div class="admin-card">
+                        <h2>Lista de Filmes</h2>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Título</th>
+                                        <th>Ano</th>
+                                        <th>Gênero</th>
+                                        <th>Avaliação</th>
+                                        <th>Premium</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="moviesTableBody">
+                                    <!-- Conteúdo será carregado dinamicamente -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Series Tab -->
+                <div class="tab-pane fade" id="series" role="tabpanel" aria-labelledby="series-tab">
+                    <div class="admin-card">
+                        <h2>Adicionar Nova Série</h2>
+                        <div id="seriesAlert" class="alert" style="display: none;"></div>
+                        <form id="seriesForm">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="seriesTitle" class="form-label">Título</label>
+                                        <input type="text" class="form-control" id="seriesTitle" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="seriesDescription" class="form-label">Descrição</label>
+                                        <textarea class="form-control" id="seriesDescription" rows="3" required></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="seriesReleaseYear" class="form-label">Ano de Lançamento</label>
+                                        <input type="number" class="form-control" id="seriesReleaseYear" min="1900" max="2100" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="seriesGenre" class="form-label">Gênero (separados por vírgula)</label>
+                                        <input type="text" class="form-control" id="seriesGenre" placeholder="Ação, Aventura, Drama" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="seriesRating" class="form-label">Avaliação (0-10)</label>
+                                        <input type="number" class="form-control" id="seriesRating" min="0" max="10" step="0.1" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="seriesPosterUrl" class="form-label">URL do Poster</label>
+                                        <input type="url" class="form-control" id="seriesPosterUrl" required>
+                                    </div>
+                                    <div class="mb-3 form-check">
+                                        <input type="checkbox" class="form-check-input" id="seriesIsPremium">
+                                        <label class="form-check-label" for="seriesIsPremium">Conteúdo Premium</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Adicionar Série</button>
+                        </form>
+                    </div>
+
+                    <div class="admin-card">
+                        <h2>Adicionar Episódio</h2>
+                        <div id="episodeAlert" class="alert" style="display: none;"></div>
+                        <form id="episodeForm">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="episodeSeries" class="form-label">Série</label>
+                                        <select class="form-select" id="episodeSeries" required>
+                                            <option value="">Selecione uma série</option>
+                                            <!-- Opções serão carregadas dinamicamente -->
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="episodeTitle" class="form-label">Título do Episódio</label>
+                                        <input type="text" class="form-control" id="episodeTitle" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="episodeDescription" class="form-label">Descrição</label>
+                                        <textarea class="form-control" id="episodeDescription" rows="3" required></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="episodeDuration" class="form-label">Duração (minutos)</label>
+                                        <input type="number" class="form-control" id="episodeDuration" min="1" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="episodeNumber" class="form-label">Número do Episódio</label>
+                                        <input type="number" class="form-control" id="episodeNumber" min="1" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="episodeSeason" class="form-label">Número da Temporada</label>
+                                        <input type="number" class="form-control" id="episodeSeason" min="1" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="episodeVideoUrl" class="form-label">URL do Vídeo</label>
+                                        <input type="url" class="form-control" id="episodeVideoUrl" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="episodeThumbnailUrl" class="form-label">URL da Miniatura</label>
+                                        <input type="url" class="form-control" id="episodeThumbnailUrl">
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Adicionar Episódio</button>
+                        </form>
+                    </div>
+
+                    <div class="admin-card">
+                        <h2>Lista de Séries</h2>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Título</th>
+                                        <th>Ano</th>
+                                        <th>Gênero</th>
+                                        <th>Avaliação</th>
+                                        <th>Episódios</th>
+                                        <th>Premium</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="seriesTableBody">
+                                    <!-- Conteúdo será carregado dinamicamente -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Verificar autenticação
+        function checkAuth() {
+            // Temporariamente removendo a verificação de autenticação
+            loadMovies();
+            loadSeries();
+        }
+
+        // Carregar filmes
+        async function loadMovies() {
+            try {
+                const response = await fetch('/api/movies');
+                if (!response.ok) {
+                    throw new Error(`Erro ao carregar filmes: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                renderMoviesTable(data.movies);
+            } catch (error) {
+                console.error('Erro ao carregar filmes:', error);
+                showAlert('movieAlert', 'Erro ao carregar filmes. Por favor, tente novamente mais tarde.', 'danger');
+            }
+        }
+
+        // Renderizar tabela de filmes
+        function renderMoviesTable(movies) {
+            const tableBody = document.getElementById('moviesTableBody');
+            
+            if (!movies || movies.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="text-center">Nenhum filme encontrado</td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tableBody.innerHTML = movies.map(movie => {
+                // Tratar o campo genre que pode vir como string JSON
+                let genres = [];
+                if (typeof movie.genre === 'string') {
+                    try {
+                        genres = JSON.parse(movie.genre);
+                    } catch (e) {
+                        genres = [movie.genre];
+                    }
+                } else if (Array.isArray(movie.genre)) {
+                    genres = movie.genre;
+                }
+                
+                return `
+                    <tr>
+                        <td>${movie.id}</td>
+                        <td>${movie.title}</td>
+                        <td>${movie.releaseYear}</td>
+                        <td>${genres.join(', ')}</td>
+                        <td>${movie.rating ? movie.rating.toFixed(1) : '0.0'}</td>
+                        <td>${movie.isPremium ? '<span class="badge bg-success">Sim</span>' : '<span class="badge bg-secondary">Não</span>'}</td>
+                        <td class="action-buttons">
+                            <button class="btn btn-sm btn-outline-light" onclick="editMovie(${movie.id})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="deleteMovie(${movie.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Carregar séries
+        async function loadSeries() {
+            try {
+                const response = await fetch('/api/series');
+                if (!response.ok) {
+                    throw new Error(`Erro ao carregar séries: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                renderSeriesTable(data.series);
+                populateSeriesDropdown(data.series);
+            } catch (error) {
+                console.error('Erro ao carregar séries:', error);
+                showAlert('seriesAlert', 'Erro ao carregar séries. Por favor, tente novamente mais tarde.', 'danger');
+            }
+        }
+
+        // Renderizar tabela de séries
+        function renderSeriesTable(series) {
+            const tableBody = document.getElementById('seriesTableBody');
+            
+            if (!series || series.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="text-center">Nenhuma série encontrada</td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tableBody.innerHTML = series.map(serie => {
+                // Tratar o campo genre que pode vir como string JSON
+                let genres = [];
+                if (typeof serie.genre === 'string') {
+                    try {
+                        genres = JSON.parse(serie.genre);
+                    } catch (e) {
+                        genres = [serie.genre];
+                    }
+                } else if (Array.isArray(serie.genre)) {
+                    genres = serie.genre;
+                }
+                
+                return `
+                    <tr>
+                        <td>${serie.id}</td>
+                        <td>${serie.title}</td>
+                        <td>${serie.releaseYear}</td>
+                        <td>${genres.join(', ')}</td>
+                        <td>${serie.rating ? serie.rating.toFixed(1) : '0.0'}</td>
+                        <td>${serie.episodes ? serie.episodes.length : 0}</td>
+                        <td>${serie.isPremium ? '<span class="badge bg-success">Sim</span>' : '<span class="badge bg-secondary">Não</span>'}</td>
+                        <td class="action-buttons">
+                            <button class="btn btn-sm btn-outline-light" onclick="editSeries(${serie.id})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="deleteSeries(${serie.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Preencher dropdown de séries para adicionar episódios
+        function populateSeriesDropdown(series) {
+            const dropdown = document.getElementById('episodeSeries');
+            
+            if (!series || series.length === 0) {
+                dropdown.innerHTML = '<option value="">Nenhuma série disponível</option>';
+                return;
+            }
+            
+            dropdown.innerHTML = `
+                <option value="">Selecione uma série</option>
+                ${series.map(serie => `<option value="${serie.id}">${serie.title}</option>`).join('')}
+            `;
+        }
+
+        // Mostrar alerta
+        function showAlert(alertId, message, type) {
+            const alert = document.getElementById(alertId);
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            alert.style.display = 'block';
+            
+            setTimeout(() => {
+                alert.style.display = 'none';
+            }, 5000);
+        }
+
+        // Adicionar filme
+        document.getElementById('movieForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const title = document.getElementById('movieTitle').value;
+            const description = document.getElementById('movieDescription').value;
+            const releaseYear = parseInt(document.getElementById('movieReleaseYear').value);
+            const genre = document.getElementById('movieGenre').value.split(',').map(g => g.trim());
+            const duration = parseInt(document.getElementById('movieDuration').value);
+            const rating = parseFloat(document.getElementById('movieRating').value);
+            const posterUrl = document.getElementById('moviePosterUrl').value;
+            const videoUrl = document.getElementById('movieVideoUrl').value;
+            const isPremium = document.getElementById('movieIsPremium').checked;
+            
+            try {
+                const response = await fetch('/api/movies', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        title,
+                        description,
+                        releaseYear,
+                        genre,
+                        duration,
+                        rating,
+                        posterUrl,
+                        videoUrl,
+                        isPremium
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Erro ao adicionar filme: ${response.status}`);
+                }
+                
+                showAlert('movieAlert', 'Filme adicionado com sucesso!', 'success');
+                document.getElementById('movieForm').reset();
+                loadMovies();
+            } catch (error) {
+                console.error('Erro ao adicionar filme:', error);
+                showAlert('movieAlert', 'Erro ao adicionar filme. Por favor, tente novamente.', 'danger');
+            }
+        });
+
+        // Adicionar série
+        document.getElementById('seriesForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const title = document.getElementById('seriesTitle').value;
+            const description = document.getElementById('seriesDescription').value;
+            const releaseYear = parseInt(document.getElementById('seriesReleaseYear').value);
+            const genre = document.getElementById('seriesGenre').value.split(',').map(g => g.trim());
+            const rating = parseFloat(document.getElementById('seriesRating').value);
+            const posterUrl = document.getElementById('seriesPosterUrl').value;
+            const isPremium = document.getElementById('seriesIsPremium').checked;
+            
+            try {
+                const response = await fetch('/api/series', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        title,
+                        description,
+                        releaseYear,
+                        genre,
+                        rating,
+                        posterUrl,
+                        isPremium
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Erro ao adicionar série: ${response.status}`);
+                }
+                
+                showAlert('seriesAlert', 'Série adicionada com sucesso!', 'success');
+                document.getElementById('seriesForm').reset();
+                loadSeries();
+            } catch (error) {
+                console.error('Erro ao adicionar série:', error);
+                showAlert('seriesAlert', 'Erro ao adicionar série. Por favor, tente novamente.', 'danger');
+            }
+        });
+
+        // Adicionar episódio
+        document.getElementById('episodeForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const seriesId = document.getElementById('episodeSeries').value;
+            const title = document.getElementById('episodeTitle').value;
+            const description = document.getElementById('episodeDescription').value;
+            const duration = parseInt(document.getElementById('episodeDuration').value);
+            const episodeNumber = parseInt(document.getElementById('episodeNumber').value);
+            const seasonNumber = parseInt(document.getElementById('episodeSeason').value);
+            const videoUrl = document.getElementById('episodeVideoUrl').value;
+            const thumbnailUrl = document.getElementById('episodeThumbnailUrl').value;
+            
+            try {
+                const response = await fetch(`/api/series/${seriesId}/episodes`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        title,
+                        description,
+                        duration,
+                        episodeNumber,
+                        seasonNumber,
+                        videoUrl,
+                        thumbnailUrl
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Erro ao adicionar episódio: ${response.status}`);
+                }
+                
+                showAlert('episodeAlert', 'Episódio adicionado com sucesso!', 'success');
+                document.getElementById('episodeForm').reset();
+                loadSeries();
+            } catch (error) {
+                console.error('Erro ao adicionar episódio:', error);
+                showAlert('episodeAlert', 'Erro ao adicionar episódio. Por favor, tente novamente.', 'danger');
+            }
+        });
+
+        // Editar filme
+        async function editMovie(id) {
+            try {
+                const response = await fetch(`/api/movies/${id}`);
+                if (!response.ok) {
+                    throw new Error(`Erro ao carregar filme: ${response.status}`);
+                }
+                
+                const movie = await response.json();
+                
+                // Preencher o formulário com os dados do filme
+                document.getElementById('movieTitle').value = movie.title;
+                document.getElementById('movieDescription').value = movie.description;
+                document.getElementById('movieReleaseYear').value = movie.releaseYear;
+                
+                // Tratar o campo genre
+                let genres = [];
+                if (typeof movie.genre === 'string') {
+                    try {
+                        genres = JSON.parse(movie.genre);
+                    } catch (e) {
+                        genres = [movie.genre];
+                    }
+                } else if (Array.isArray(movie.genre)) {
+                    genres = movie.genre;
+                }
+                
+                document.getElementById('movieGenre').value = genres.join(', ');
+                document.getElementById('movieDuration').value = movie.duration;
+                document.getElementById('movieRating').value = movie.rating;
+                document.getElementById('moviePosterUrl').value = movie.posterUrl;
+                document.getElementById('movieVideoUrl').value = movie.videoUrl;
+                document.getElementById('movieIsPremium').checked = movie.isPremium;
+                
+                // Alterar o botão de submit para atualizar
+                const submitButton = document.querySelector('#movieForm button[type="submit"]');
+                submitButton.textContent = 'Atualizar Filme';
+                submitButton.dataset.movieId = id;
+                
+                // Alterar o evento de submit
+                const form = document.getElementById('movieForm');
+                form.removeEventListener('submit', form.onsubmit);
+                form.onsubmit = async (e) => {
+                    e.preventDefault();
+                    
+                    const title = document.getElementById('movieTitle').value;
+                    const description = document.getElementById('movieDescription').value;
+                    const releaseYear = parseInt(document.getElementById('movieReleaseYear').value);
+                    const genre = document.getElementById('movieGenre').value.split(',').map(g => g.trim());
+                    const duration = parseInt(document.getElementById('movieDuration').value);
+                    const rating = parseFloat(document.getElementById('movieRating').value);
+                    const posterUrl = document.getElementById('moviePosterUrl').value;
+                    const videoUrl = document.getElementById('movieVideoUrl').value;
+                    const isPremium = document.getElementById('movieIsPremium').checked;
+                    
+                    try {
+                        const updateResponse = await fetch(`/api/movies/${id}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                title,
+                                description,
+                                releaseYear,
+                                genre,
+                                duration,
+                                rating,
+                                posterUrl,
+                                videoUrl,
+                                isPremium
+                            })
+                        });
+                        
+                        if (!updateResponse.ok) {
+                            throw new Error(`Erro ao atualizar filme: ${updateResponse.status}`);
+                        }
+                        
+                        showAlert('movieAlert', 'Filme atualizado com sucesso!', 'success');
+                        document.getElementById('movieForm').reset();
+                        
+                        // Restaurar o botão e o evento de submit
+                        submitButton.textContent = 'Adicionar Filme';
+                        delete submitButton.dataset.movieId;
+                        form.removeEventListener('submit', form.onsubmit);
+                        form.onsubmit = null;
+                        form.addEventListener('submit', async (e) => {
+                            e.preventDefault();
+                            // Código original para adicionar filme
+                        });
+                        
+                        loadMovies();
+                    } catch (error) {
+                        console.error('Erro ao atualizar filme:', error);
+                        showAlert('movieAlert', 'Erro ao atualizar filme. Por favor, tente novamente.', 'danger');
+                    }
+                };
+                
+                // Rolar para o formulário
+                document.getElementById('movies-tab').scrollIntoView({ behavior: 'smooth' });
+            } catch (error) {
+                console.error('Erro ao carregar filme para edição:', error);
+                showAlert('movieAlert', 'Erro ao carregar filme para edição. Por favor, tente novamente.', 'danger');
+            }
+        }
+
+        // Editar série
+        async function editSeries(id) {
+            try {
+                const response = await fetch(`/api/series/${id}`);
+                if (!response.ok) {
+                    throw new Error(`Erro ao carregar série: ${response.status}`);
+                }
+                
+                const series = await response.json();
+                
+                // Preencher o formulário com os dados da série
+                document.getElementById('seriesTitle').value = series.title;
+                document.getElementById('seriesDescription').value = series.description;
+                document.getElementById('seriesReleaseYear').value = series.releaseYear;
+                
+                // Tratar o campo genre
+                let genres = [];
+                if (typeof series.genre === 'string') {
+                    try {
+                        genres = JSON.parse(series.genre);
+                    } catch (e) {
+                        genres = [series.genre];
+                    }
+                } else if (Array.isArray(series.genre)) {
+                    genres = series.genre;
+                }
+                
+                document.getElementById('seriesGenre').value = genres.join(', ');
+                document.getElementById('seriesRating').value = series.rating;
+                document.getElementById('seriesPosterUrl').value = series.posterUrl;
+                document.getElementById('seriesIsPremium').checked = series.isPremium;
+                
+                // Alterar o botão de submit para atualizar
+                const submitButton = document.querySelector('#seriesForm button[type="submit"]');
+                submitButton.textContent = 'Atualizar Série';
+                submitButton.dataset.seriesId = id;
+                
+                // Alterar o evento de submit
+                const form = document.getElementById('seriesForm');
+                form.removeEventListener('submit', form.onsubmit);
+                form.onsubmit = async (e) => {
+                    e.preventDefault();
+                    
+                    const title = document.getElementById('seriesTitle').value;
+                    const description = document.getElementById('seriesDescription').value;
+                    const releaseYear = parseInt(document.getElementById('seriesReleaseYear').value);
+                    const genre = document.getElementById('seriesGenre').value.split(',').map(g => g.trim());
+                    const rating = parseFloat(document.getElementById('seriesRating').value);
+                    const posterUrl = document.getElementById('seriesPosterUrl').value;
+                    const isPremium = document.getElementById('seriesIsPremium').checked;
+                    
+                    try {
+                        const updateResponse = await fetch(`/api/series/${id}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                title,
+                                description,
+                                releaseYear,
+                                genre,
+                                rating,
+                                posterUrl,
+                                isPremium
+                            })
+                        });
+                        
+                        if (!updateResponse.ok) {
+                            throw new Error(`Erro ao atualizar série: ${updateResponse.status}`);
+                        }
+                        
+                        showAlert('seriesAlert', 'Série atualizada com sucesso!', 'success');
+                        document.getElementById('seriesForm').reset();
+                        
+                        // Restaurar o botão e o evento de submit
+                        submitButton.textContent = 'Adicionar Série';
+                        delete submitButton.dataset.seriesId;
+                        form.removeEventListener('submit', form.onsubmit);
+                        form.onsubmit = null;
+                        form.addEventListener('submit', async (e) => {
+                            e.preventDefault();
+                            // Código original para adicionar série
+                        });
+                        
+                        loadSeries();
+                    } catch (error) {
+                        console.error('Erro ao atualizar série:', error);
+                        showAlert('seriesAlert', 'Erro ao atualizar série. Por favor, tente novamente.', 'danger');
+                    }
+                };
+                
+                // Rolar para o formulário
+                document.getElementById('series-tab').scrollIntoView({ behavior: 'smooth' });
+            } catch (error) {
+                console.error('Erro ao carregar série para edição:', error);
+                showAlert('seriesAlert', 'Erro ao carregar série para edição. Por favor, tente novamente.', 'danger');
+            }
+        }
+
+        // Excluir filme
+        async function deleteMovie(id) {
+            if (confirm('Tem certeza que deseja excluir este filme?')) {
+                try {
+                    const response = await fetch(`/api/movies/${id}`, {
+                        method: 'DELETE'
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`Erro ao excluir filme: ${response.status}`);
+                    }
+                    
+                    showAlert('movieAlert', 'Filme excluído com sucesso!', 'success');
+                    loadMovies();
+                } catch (error) {
+                    console.error('Erro ao excluir filme:', error);
+                    showAlert('movieAlert', 'Erro ao excluir filme. Por favor, tente novamente.', 'danger');
+                }
+            }
+        }
+
+        // Excluir série
+        async function deleteSeries(id) {
+            if (confirm('Tem certeza que deseja excluir esta série? Todos os episódios também serão excluídos.')) {
+                try {
+                    const response = await fetch(`/api/series/${id}`, {
+                        method: 'DELETE'
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`Erro ao excluir série: ${response.status}`);
+                    }
+                    
+                    showAlert('seriesAlert', 'Série excluída com sucesso!', 'success');
+                    loadSeries();
+                } catch (error) {
+                    console.error('Erro ao excluir série:', error);
+                    showAlert('seriesAlert', 'Erro ao excluir série. Por favor, tente novamente.', 'danger');
+                }
+            }
+        }
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Inicializar
+        checkAuth();
+    </script>
+</body>
+</html> 
