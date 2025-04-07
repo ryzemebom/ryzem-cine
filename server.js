@@ -18,7 +18,15 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Servir arquivos estáticos
 app.use(express.static(path.join(__dirname, 'pages')));
+
+// Logging middleware
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+  next();
+});
 
 // Rotas da API
 app.use('/api/auth', authRoutes);
@@ -27,7 +35,22 @@ app.use('/api/series', seriesRoutes);
 
 // Rota para servir o frontend
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'pages', 'index.html'));
+  try {
+    // Verificar se é uma rota da API
+    if (req.path.startsWith('/api/')) {
+      return next();
+    }
+    res.sendFile(path.join(__dirname, 'pages', 'index.html'));
+  } catch (error) {
+    console.error('Erro ao servir arquivo:', error);
+    res.status(500).json({ message: 'Erro interno do servidor' });
+  }
+});
+
+// Middleware de tratamento de erros
+app.use((err, req, res, next) => {
+  console.error('Erro:', err);
+  res.status(500).json({ message: 'Erro interno do servidor' });
 });
 
 // Sincronizar modelos com o banco de dados
@@ -35,12 +58,20 @@ sequelize.sync({ alter: true })
   .then(() => {
     console.log('Modelos sincronizados com o banco de dados.');
     
-    // Iniciar servidor
-    const PORT = process.env.PORT || 3000;
-    app.listen(PORT, () => {
-      console.log(`Servidor rodando na porta ${PORT}`);
-    });
+    // Iniciar servidor apenas se não estiver no Vercel
+    if (process.env.NODE_ENV !== 'production') {
+      const PORT = process.env.PORT || 3000;
+      app.listen(PORT, () => {
+        console.log(`Servidor rodando na porta ${PORT}`);
+      });
+    }
   })
   .catch(err => {
     console.error('Erro ao sincronizar modelos:', err);
-  }); 
+    if (process.env.NODE_ENV !== 'production') {
+      process.exit(1);
+    }
+  });
+
+// Exportar o app para o Vercel
+module.exports = app; 

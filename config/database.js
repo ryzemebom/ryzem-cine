@@ -1,9 +1,12 @@
 const { Sequelize } = require('sequelize');
 const path = require('path');
 
+// Configuração do banco de dados
 const sequelize = new Sequelize({
   dialect: 'sqlite',
-  storage: path.join(__dirname, '../database.sqlite'),
+  storage: process.env.NODE_ENV === 'production' 
+    ? ':memory:' // Usar banco em memória no Vercel
+    : path.join(__dirname, '../database.sqlite'),
   logging: false
 });
 
