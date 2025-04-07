@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Perfil - Ryzem Cine</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #e50914;
+            --secondary-color: #141414;
+            --text-color: #ffffff;
+            --hover-color: #ff0f1a;
+        }
+
+        body {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .navbar {
+            background-color: rgba(0, 0, 0, 0.9);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: background-color 0.3s;
+        }
+
+        .navbar.scrolled {
+            background-color: var(--secondary-color);
+        }
+
+        .navbar-brand {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .nav-link {
+            color: var(--text-color);
+            margin: 0 1rem;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color);
+        }
+
+        .profile-header {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                        url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center;
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+        }
+
+        .profile-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            margin: 0 auto 1.5rem;
+            color: var(--text-color);
+        }
+
+        .profile-name {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-email {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            margin-bottom: 1rem;
+        }
+
+        .profile-subscription {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .subscription-basic {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .subscription-premium {
+            background-color: gold;
+            color: black;
+        }
+
+        .profile-content {
+            padding: 4rem 2rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-text {
+            opacity: 0.8;
+            margin-bottom: 1rem;
+        }
+
+        .badge {
+            background-color: var(--primary-color);
+            margin-right: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+            padding: 0.8rem 2rem;
+            font-size: 1.1rem;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--hover-color);
+        }
+
+        .btn-outline-light {
+            border: 2px solid var(--text-color);
+            padding: 0.8rem 2rem;
+            font-size: 1.1rem;
+            margin-left: 1rem;
+            transition: all 0.3s;
+        }
+
+        .btn-outline-light:hover {
+            background-color: var(--text-color);
+            color: var(--secondary-color);
+        }
+
+        .user-menu {
+            position: relative;
+        }
+
+        .user-menu .dropdown-menu {
+            background-color: rgba(0, 0, 0, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .user-menu .dropdown-item {
+            color: var(--text-color);
+        }
+
+        .user-menu .dropdown-item:hover {
+            background-color: var(--primary-color);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state p {
+            opacity: 0.8;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .profile-header {
+                padding: 6rem 1rem 3rem;
+            }
+
+            .profile-avatar {
+                width: 100px;
+                height: 100px;
+                font-size: 3rem;
+            }
+
+            .profile-name {
+                font-size: 2rem;
+            }
+
+            .profile-content {
+                padding: 2rem 1rem;
+            }
+
+            .btn-outline-light {
+                margin-left: 0;
+                margin-top: 1rem;
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="/">Ryzem Cine</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Início</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/movies">Filmes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/series">Séries</a>
+                    </li>
+                </ul>
+                <div class="user-menu">
+                    <button class="btn btn-link text-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="userName">Usuário</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="/profile">Meu Perfil</a></li>
+                        <li><a class="dropdown-item" href="/watchlist">Minha Lista</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" id="logoutBtn">Sair</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Profile Header -->
+    <div class="profile-header">
+        <div class="profile-avatar" id="profileAvatar">
+            U
+        </div>
+        <h1 class="profile-name" id="profileName">Carregando...</h1>
+        <p class="profile-email" id="profileEmail"></p>
+        <div class="profile-subscription" id="profileSubscription"></div>
+        <button class="btn btn-primary" id="upgradeButton" style="display: none;">
+            <i class="fas fa-crown"></i> Fazer Upgrade
+        </button>
+    </div>
+
+    <!-- Profile Content -->
+    <div class="profile-content">
+        <div class="container">
+            <!-- Minha Lista -->
+            <section class="mb-5">
+                <h2 class="section-title">Minha Lista</h2>
+                <div class="row" id="watchlistContainer">
+                    <!-- Conteúdo será carregado dinamicamente -->
+                </div>
+            </section>
+
+            <!-- Histórico -->
+            <section>
+                <h2 class="section-title">Histórico</h2>
+                <div class="row" id="historyContainer">
+                    <!-- Conteúdo será carregado dinamicamente -->
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Verificar autenticação
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = '/login';
+                return;
+            }
+            fetchUserInfo();
+        }
+
+        // Buscar informações do usuário
+        async function fetchUserInfo() {
+            try {
+                const response = await fetch('/api/auth/me', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                const user = await response.json();
+
+                // Atualizar informações do perfil
+                document.getElementById('profileAvatar').textContent = user.name.charAt(0).toUpperCase();
+                document.getElementById('profileName').textContent = user.name;
+                document.getElementById('profileEmail').textContent = user.email;
+                document.getElementById('userName').textContent = user.name;
+
+                // Atualizar badge de assinatura
+                const subscriptionBadge = document.getElementById('profileSubscription');
+                if (user.subscription === 'premium') {
+                    subscriptionBadge.className = 'profile-subscription subscription-premium';
+                    subscriptionBadge.textContent = 'Premium';
+                    document.getElementById('upgradeButton').style.display = 'none';
+                } else {
+                    subscriptionBadge.className = 'profile-subscription subscription-basic';
+                    subscriptionBadge.textContent = 'Básico';
+                    document.getElementById('upgradeButton').style.display = 'inline-block';
+                }
+
+                // Carregar lista de assistir
+                loadWatchlist();
+                // Carregar histórico
+                loadHistory();
+
+            } catch (error) {
+                console.error('Erro ao buscar informações do usuário:', error);
+                window.location.href = '/login';
+            }
+        }
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('token');
+            window.location.href = '/';
+        });
+
+        // Upgrade de assinatura
+        document.getElementById('upgradeButton').addEventListener('click', async () => {
+            try {
+                const response = await fetch('/api/users/subscription', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    body: JSON.stringify({ plan: 'premium' })
+                });
+
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    alert('Erro ao fazer upgrade da assinatura');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao fazer upgrade da assinatura');
+            }
+        });
+
+        // Carregar lista de assistir
+        async function loadWatchlist() {
+            try {
+                const response = await fetch('/api/users/watchlist', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                const watchlist = await response.json();
+
+                const container = document.getElementById('watchlistContainer');
+                if (watchlist.length === 0) {
+                    container.innerHTML = `
+                        <div class="col-12">
+                            <div class="empty-state">
+                                <i class="fas fa-list"></i>
+                                <h3>Sua lista está vazia</h3>
+                                <p>Adicione filmes e séries à sua lista para assistir depois</p>
+                                <a href="/movies" class="btn btn-primary">Explorar Filmes</a>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    container.innerHTML = watchlist.map(item => `
+                        <div class="col-md-3 mb-4">
+                            <div class="card">
+                                <img src="${item.posterUrl}" alt="${item.title}">
+                                <div class="card-body">
+                                    <h5 class="card-title">${item.title}</h5>
+                                    <p class="card-text">${item.description.substring(0, 100)}...</p>
+                                    <div>
+                                        <span class="badge">${item.genre.join(', ')}</span>
+                                        <span class="badge">${item.releaseYear}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Erro ao carregar lista:', error);
+            }
+        }
+
+        // Carregar histórico
+        async function loadHistory() {
+            try {
+                const response = await fetch('/api/users/history', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                const history = await response.json();
+
+                const container = document.getElementById('historyContainer');
+                if (history.length === 0) {
+                    container.innerHTML = `
+                        <div class="col-12">
+                            <div class="empty-state">
+                                <i class="fas fa-history"></i>
+                                <h3>Nenhum histórico</h3>
+                                <p>Assista a filmes e séries para ver seu histórico aqui</p>
+                                <a href="/movies" class="btn btn-primary">Explorar Filmes</a>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    container.innerHTML = history.map(item => `
+                        <div class="col-md-3 mb-4">
+                            <div class="card">
+                                <img src="${item.posterUrl}" alt="${item.title}">
+                                <div class="card-body">
+                                    <h5 class="card-title">${item.title}</h5>
+                                    <p class="card-text">Assistido em: ${new Date(item.watchedAt).toLocaleDateString()}</p>
+                                    <div>
+                                        <span class="badge">${item.genre.join(', ')}</span>
+                                        <span class="badge">${item.releaseYear}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Erro ao carregar histórico:', error);
+            }
+        }
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Inicializar
+        checkAuth();
+    </script>
+</body>
+</html> 

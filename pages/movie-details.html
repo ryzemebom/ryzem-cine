@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,13 +7,49 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #e50914;
+            --secondary-color: #141414;
+            --text-color: #ffffff;
+            --hover-color: #ff0f1a;
+        }
+
         body {
-            background-color: #141414;
-            color: white;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
+
         .navbar {
-            background-color: rgba(0, 0, 0, 0.9) !important;
+            background-color: rgba(0, 0, 0, 0.9);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: background-color 0.3s;
         }
+
+        .navbar.scrolled {
+            background-color: var(--secondary-color);
+        }
+
+        .navbar-brand {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .nav-link {
+            color: var(--text-color);
+            margin: 0 1rem;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color);
+        }
+
         .movie-header {
             position: relative;
             height: 70vh;
@@ -21,7 +57,9 @@
             background-position: center;
             display: flex;
             align-items: flex-end;
+            padding: 2rem;
         }
+
         .movie-header::before {
             content: '';
             position: absolute;
@@ -29,258 +67,471 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 60%, rgba(0,0,0,0.8) 100%);
+            background: linear-gradient(to top, var(--secondary-color), transparent);
             z-index: 1;
         }
-        .movie-info {
+
+        .movie-header-content {
             position: relative;
             z-index: 2;
-            padding: 2rem 0;
+            max-width: 800px;
         }
+
         .movie-title {
             font-size: 3rem;
             font-weight: bold;
             margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
-        .movie-meta {
+
+        .movie-info {
             display: flex;
-            align-items: center;
+            gap: 1rem;
             margin-bottom: 1rem;
         }
-        .movie-meta span {
-            margin-right: 1rem;
+
+        .movie-info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
-        .movie-rating {
-            color: #ffd700;
+
+        .movie-info-item i {
+            color: var(--primary-color);
         }
-        .btn-play {
-            background-color: #e50914;
-            border: none;
-            padding: 0.5rem 2rem;
-            font-size: 1.2rem;
-            margin-right: 1rem;
-        }
-        .btn-play:hover {
-            background-color: #f40612;
-        }
-        .btn-outline-light {
-            border: 1px solid white;
-        }
-        .btn-outline-light:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
+
         .movie-description {
             font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
             line-height: 1.6;
         }
-        .video-container {
-            position: relative;
-            padding-bottom: 56.25%; /* 16:9 */
-            height: 0;
-            overflow: hidden;
-            margin-top: 2rem;
+
+        .movie-actions {
+            display: flex;
+            gap: 1rem;
         }
-        .video-container iframe {
-            position: absolute;
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+            padding: 0.8rem 2rem;
+            font-size: 1.1rem;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--hover-color);
+        }
+
+        .btn-outline-light {
+            border: 2px solid var(--text-color);
+            padding: 0.8rem 2rem;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+
+        .btn-outline-light:hover {
+            background-color: var(--text-color);
+            color: var(--secondary-color);
+        }
+
+        .movie-content {
+            padding: 4rem 2rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 2rem;
+        }
+
+        .cast-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .cast-card {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .cast-card:hover {
+            transform: scale(1.05);
+        }
+
+        .cast-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .cast-info {
+            padding: 1rem;
+        }
+
+        .cast-name {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .cast-role {
+            opacity: 0.8;
+        }
+
+        .video-player {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            display: none;
         }
-        .cast-section {
-            margin-top: 3rem;
+
+        .video-player.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-        .cast-card {
-            background-color: #222;
-            border-radius: 5px;
-            overflow: hidden;
-            transition: transform 0.3s;
+
+        .video-container {
+            width: 90%;
+            max-width: 1200px;
+            aspect-ratio: 16/9;
         }
-        .cast-card:hover {
-            transform: scale(1.05);
+
+        .close-video {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            color: var(--text-color);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.3s;
         }
-        .cast-card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
+
+        .close-video:hover {
+            color: var(--primary-color);
         }
-        .cast-info {
-            padding: 1rem;
+
+        .user-menu {
+            position: relative;
         }
-        .cast-name {
-            font-weight: bold;
+
+        .user-menu .dropdown-menu {
+            background-color: rgba(0, 0, 0, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        .cast-role {
-            color: #aaa;
-            font-size: 0.9rem;
+
+        .user-menu .dropdown-item {
+            color: var(--text-color);
+        }
+
+        .user-menu .dropdown-item:hover {
+            background-color: var(--primary-color);
+        }
+
+        .badge {
+            background-color: var(--primary-color);
+            margin-right: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .movie-header {
+                height: 50vh;
+            }
+
+            .movie-title {
+                font-size: 2rem;
+            }
+
+            .movie-info {
+                flex-wrap: wrap;
+            }
+
+            .movie-actions {
+                flex-direction: column;
+            }
+
+            .cast-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 1rem;
+            }
+
+            .cast-image {
+                height: 200px;
+            }
         }
     </style>
 </head>
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <nav class="navbar navbar-expand-lg">
         <div class="container">
             <a class="navbar-brand" href="/">Ryzem Cine</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="/#filmes">Filmes</a>
+                        <a class="nav-link" href="/">Início</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/#series">Séries</a>
+                        <a class="nav-link" href="/movies">Filmes</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/pages/login.html">Login</a>
+                        <a class="nav-link" href="/series">Séries</a>
                     </li>
                 </ul>
+                <div class="user-menu">
+                    <button class="btn btn-link text-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="userName">Usuário</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="/profile">Meu Perfil</a></li>
+                        <li><a class="dropdown-item" href="/watchlist">Minha Lista</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" id="logoutBtn">Sair</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </nav>
 
     <!-- Movie Header -->
     <div class="movie-header" id="movieHeader">
-        <div class="container movie-info">
+        <div class="movie-header-content">
             <h1 class="movie-title" id="movieTitle">Carregando...</h1>
-            <div class="movie-meta">
-                <span id="movieYear">2024</span>
-                <span id="movieDuration">2h 30min</span>
-                <span id="movieGenre">Ação, Aventura</span>
-                <span class="movie-rating"><i class="fas fa-star"></i> <span id="movieRating">8.5</span></span>
+            <div class="movie-info">
+                <div class="movie-info-item">
+                    <i class="fas fa-star"></i>
+                    <span id="movieRating">0.0</span>
+                </div>
+                <div class="movie-info-item">
+                    <i class="fas fa-calendar"></i>
+                    <span id="movieYear">2024</span>
+                </div>
+                <div class="movie-info-item">
+                    <i class="fas fa-clock"></i>
+                    <span id="movieDuration">0 min</span>
+                </div>
             </div>
-            <div class="d-flex mb-4">
-                <button class="btn btn-primary btn-play" id="playButton">
-                    <i class="fas fa-play me-2"></i> Assistir
+            <p class="movie-description" id="movieDescription">Carregando descrição...</p>
+            <div class="movie-actions">
+                <button class="btn btn-primary" id="watchBtn">
+                    <i class="fas fa-play"></i> Assistir
                 </button>
-                <button class="btn btn-outline-light" id="addToListButton">
-                    <i class="fas fa-plus me-2"></i> Minha Lista
+                <button class="btn btn-outline-light" id="watchlistBtn">
+                    <i class="fas fa-plus"></i> Minha Lista
                 </button>
             </div>
-            <p class="movie-description" id="movieDescription">
-                Carregando descrição...
-            </p>
         </div>
     </div>
 
-    <!-- Video Player (inicialmente oculto) -->
-    <div class="container mt-4" id="videoContainer" style="display: none;">
+    <!-- Movie Content -->
+    <div class="movie-content">
+        <div class="container">
+            <!-- Elenco -->
+            <h2 class="section-title">Elenco</h2>
+            <div class="cast-grid" id="castGrid">
+                <!-- Conteúdo será carregado dinamicamente -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Player -->
+    <div class="video-player" id="videoPlayer">
         <div class="video-container">
-            <iframe id="videoPlayer" src="" frameborder="0" allowfullscreen></iframe>
+            <video id="movieVideo" controls>
+                <source src="" type="video/mp4">
+                Seu navegador não suporta o elemento de vídeo.
+            </video>
+        </div>
+        <div class="close-video" id="closeVideo">
+            <i class="fas fa-times"></i>
         </div>
     </div>
 
-    <!-- Cast Section -->
-    <div class="container cast-section">
-        <h2 class="mb-4">Elenco</h2>
-        <div class="row" id="castContainer">
-            <!-- Cast cards will be added here dynamically -->
-        </div>
-    </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Função para obter o ID do filme da URL
-        function getMovieIdFromUrl() {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('id');
-        }
-
-        // Função para carregar os detalhes do filme
-        async function loadMovieDetails() {
-            const movieId = getMovieIdFromUrl();
-            if (!movieId) {
-                window.location.href = '/';
+        // Verificar autenticação
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = '/login';
                 return;
             }
+            fetchUserInfo();
+            loadMovieDetails();
+        }
 
+        // Buscar informações do usuário
+        async function fetchUserInfo() {
             try {
-                const response = await fetch(`/api/movies/${movieId}`);
-                if (!response.ok) {
-                    throw new Error('Filme não encontrado');
-                }
-
-                const movie = await response.json();
-                
-                // Atualizar o cabeçalho com a imagem de fundo
-                document.getElementById('movieHeader').style.backgroundImage = `url(${movie.posterUrl})`;
-                
-                // Atualizar as informações do filme
-                document.getElementById('movieTitle').textContent = movie.title;
-                document.getElementById('movieYear').textContent = movie.releaseYear;
-                document.getElementById('movieDuration').textContent = `${movie.duration} min`;
-                document.getElementById('movieGenre').textContent = movie.genre.join(', ');
-                document.getElementById('movieRating').textContent = movie.rating.toFixed(1);
-                document.getElementById('movieDescription').textContent = movie.description;
-                
-                // Configurar o botão de play
-                document.getElementById('playButton').addEventListener('click', () => {
-                    document.getElementById('videoContainer').style.display = 'block';
-                    document.getElementById('videoPlayer').src = movie.videoUrl;
-                    document.getElementById('playButton').textContent = 'Assistindo...';
-                });
-                
-                // Configurar o botão de adicionar à lista
-                document.getElementById('addToListButton').addEventListener('click', async () => {
-                    const token = localStorage.getItem('token');
-                    if (!token) {
-                        window.location.href = '/pages/login.html';
-                        return;
-                    }
-                    
-                    try {
-                        const response = await fetch('/api/movies/watchlist', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Authorization': `Bearer ${token}`
-                            },
-                            body: JSON.stringify({ movieId })
-                        });
-                        
-                        if (response.ok) {
-                            alert('Filme adicionado à sua lista!');
-                        } else {
-                            const data = await response.json();
-                            alert(data.message || 'Erro ao adicionar à lista');
-                        }
-                    } catch (error) {
-                        alert('Erro ao conectar com o servidor');
+                const response = await fetch('/api/auth/me', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
                     }
                 });
-                
-                // Carregar elenco (exemplo estático)
-                const castContainer = document.getElementById('castContainer');
-                const castMembers = [
-                    { name: 'Ator 1', role: 'Personagem Principal', image: 'https://source.unsplash.com/random/200x200/?actor' },
-                    { name: 'Atriz 1', role: 'Personagem Secundário', image: 'https://source.unsplash.com/random/200x200/?actress' },
-                    { name: 'Ator 2', role: 'Vilão', image: 'https://source.unsplash.com/random/200x200/?actor' },
-                    { name: 'Atriz 2', role: 'Personagem de Suporte', image: 'https://source.unsplash.com/random/200x200/?actress' }
-                ];
-                
-                castMembers.forEach(member => {
-                    const castCard = document.createElement('div');
-                    castCard.className = 'col-md-3 mb-4';
-                    castCard.innerHTML = `
-                        <div class="cast-card">
-                            <img src="${member.image}" alt="${member.name}">
-                            <div class="cast-info">
-                                <div class="cast-name">${member.name}</div>
-                                <div class="cast-role">${member.role}</div>
-                            </div>
-                        </div>
-                    `;
-                    castContainer.appendChild(castCard);
-                });
-                
+                const user = await response.json();
+                document.getElementById('userName').textContent = user.name;
             } catch (error) {
-                console.error('Erro ao carregar detalhes do filme:', error);
-                alert('Erro ao carregar detalhes do filme');
+                console.error('Erro ao buscar informações do usuário:', error);
+                window.location.href = '/login';
             }
         }
 
-        // Carregar os detalhes do filme quando a página for carregada
-        document.addEventListener('DOMContentLoaded', loadMovieDetails);
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('token');
+            window.location.href = '/';
+        });
+
+        // Carregar detalhes do filme
+        async function loadMovieDetails() {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const movieId = urlParams.get('id');
+
+                const response = await fetch(`/api/movies/${movieId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                const movie = await response.json();
+
+                // Atualizar cabeçalho
+                document.getElementById('movieHeader').style.backgroundImage = `url(${movie.posterUrl})`;
+                document.getElementById('movieTitle').textContent = movie.title;
+                document.getElementById('movieRating').textContent = movie.rating.toFixed(1);
+                document.getElementById('movieYear').textContent = movie.releaseYear;
+                document.getElementById('movieDuration').textContent = `${movie.duration} min`;
+                document.getElementById('movieDescription').textContent = movie.description;
+
+                // Atualizar título da página
+                document.title = `${movie.title} - Ryzem Cine`;
+
+                // Carregar elenco
+                loadCast(movie.cast);
+
+                // Configurar botões
+                setupButtons(movie);
+            } catch (error) {
+                console.error('Erro ao carregar detalhes do filme:', error);
+            }
+        }
+
+        // Carregar elenco
+        function loadCast(cast) {
+            const container = document.getElementById('castGrid');
+            container.innerHTML = cast.map(person => `
+                <div class="cast-card">
+                    <img src="${person.photoUrl}" alt="${person.name}" class="cast-image">
+                    <div class="cast-info">
+                        <div class="cast-name">${person.name}</div>
+                        <div class="cast-role">${person.role}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Configurar botões
+        function setupButtons(movie) {
+            const watchBtn = document.getElementById('watchBtn');
+            const watchlistBtn = document.getElementById('watchlistBtn');
+            const videoPlayer = document.getElementById('videoPlayer');
+            const movieVideo = document.getElementById('movieVideo');
+            const closeVideo = document.getElementById('closeVideo');
+
+            // Botão de assistir
+            watchBtn.addEventListener('click', () => {
+                if (movie.isPremium) {
+                    // Verificar se o usuário é premium
+                    checkPremiumAccess();
+                } else {
+                    playMovie(movie.videoUrl);
+                }
+            });
+
+            // Botão da lista
+            watchlistBtn.addEventListener('click', async () => {
+                try {
+                    const response = await fetch('/api/users/watchlist', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ movieId: movie._id })
+                    });
+
+                    if (response.ok) {
+                        watchlistBtn.innerHTML = '<i class="fas fa-check"></i> Na Minha Lista';
+                        watchlistBtn.disabled = true;
+                    }
+                } catch (error) {
+                    console.error('Erro ao adicionar à lista:', error);
+                }
+            });
+
+            // Fechar vídeo
+            closeVideo.addEventListener('click', () => {
+                videoPlayer.classList.remove('active');
+                movieVideo.pause();
+            });
+        }
+
+        // Verificar acesso premium
+        async function checkPremiumAccess() {
+            try {
+                const response = await fetch('/api/auth/me', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                const user = await response.json();
+
+                if (user.subscription === 'premium') {
+                    playMovie(movie.videoUrl);
+                } else {
+                    alert('Este conteúdo é exclusivo para assinantes premium. Faça upgrade da sua conta para assistir.');
+                }
+            } catch (error) {
+                console.error('Erro ao verificar acesso premium:', error);
+            }
+        }
+
+        // Reproduzir filme
+        function playMovie(videoUrl) {
+            const videoPlayer = document.getElementById('videoPlayer');
+            const movieVideo = document.getElementById('movieVideo');
+            
+            movieVideo.src = videoUrl;
+            videoPlayer.classList.add('active');
+            movieVideo.play();
+        }
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Inicializar
+        checkAuth();
     </script>
 </body>
 </html> 

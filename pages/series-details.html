@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,13 +7,49 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #e50914;
+            --secondary-color: #141414;
+            --text-color: #ffffff;
+            --hover-color: #ff0f1a;
+        }
+
         body {
-            background-color: #141414;
-            color: white;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
+
         .navbar {
-            background-color: rgba(0, 0, 0, 0.9) !important;
+            background-color: rgba(0, 0, 0, 0.9);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: background-color 0.3s;
         }
+
+        .navbar.scrolled {
+            background-color: var(--secondary-color);
+        }
+
+        .navbar-brand {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .nav-link {
+            color: var(--text-color);
+            margin: 0 1rem;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color);
+        }
+
         .series-header {
             position: relative;
             height: 70vh;
@@ -21,8 +57,9 @@
             background-position: center;
             display: flex;
             align-items: flex-end;
-            padding-bottom: 2rem;
+            padding: 2rem;
         }
+
         .series-header::before {
             content: '';
             position: absolute;
@@ -30,369 +67,612 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.9) 100%);
-        }
-        .series-info {
-            position: relative;
+            background: linear-gradient(to top, var(--secondary-color), transparent);
             z-index: 1;
         }
+
+        .series-header-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+        }
+
+        .series-title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .series-info {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .series-info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .series-info-item i {
+            color: var(--primary-color);
+        }
+
+        .series-description {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .series-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
         .btn-primary {
-            background-color: #e50914;
+            background-color: var(--primary-color);
             border: none;
+            padding: 0.8rem 2rem;
+            font-size: 1.1rem;
+            transition: background-color 0.3s;
         }
+
         .btn-primary:hover {
-            background-color: #f40612;
+            background-color: var(--hover-color);
         }
+
         .btn-outline-light {
-            border: 1px solid white;
+            border: 2px solid var(--text-color);
+            padding: 0.8rem 2rem;
+            font-size: 1.1rem;
+            transition: all 0.3s;
         }
+
         .btn-outline-light:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: var(--text-color);
+            color: var(--secondary-color);
         }
-        .episode-card {
+
+        .series-content {
+            padding: 4rem 2rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 2rem;
+        }
+
+        .seasons-list {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .season-card {
             background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .season-header {
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+
+        .season-header:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .season-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .season-meta {
+            display: flex;
+            gap: 1rem;
+            opacity: 0.8;
+        }
+
+        .season-content {
+            padding: 0 1.5rem 1.5rem;
+            display: none;
+        }
+
+        .season-content.active {
+            display: block;
+        }
+
+        .episodes-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .episode-card {
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
             overflow: hidden;
             transition: transform 0.3s;
-            cursor: pointer;
         }
+
         .episode-card:hover {
             transform: scale(1.02);
         }
-        .episode-card img {
+
+        .episode-image {
             width: 100%;
-            height: 150px;
+            height: 180px;
             object-fit: cover;
         }
-        .cast-card {
-            text-align: center;
+
+        .episode-info {
+            padding: 1rem;
         }
-        .cast-card img {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            object-fit: cover;
+
+        .episode-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .episode-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+            opacity: 0.8;
             margin-bottom: 1rem;
         }
-        .video-container {
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
+
+        .episode-description {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
             overflow: hidden;
-            display: none;
         }
-        .video-container iframe {
-            position: absolute;
+
+        .btn-play {
+            width: 100%;
+            background-color: var(--primary-color);
+            border: none;
+            padding: 0.8rem;
+            border-radius: 5px;
+            color: var(--text-color);
+            transition: background-color 0.3s;
+        }
+
+        .btn-play:hover {
+            background-color: var(--hover-color);
+        }
+
+        .cast-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .cast-card {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .cast-card:hover {
+            transform: scale(1.05);
+        }
+
+        .cast-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .cast-info {
+            padding: 1rem;
+        }
+
+        .cast-name {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .cast-role {
+            opacity: 0.8;
+        }
+
+        .video-player {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            display: none;
+        }
+
+        .video-player.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .video-container {
+            width: 90%;
+            max-width: 1200px;
+            aspect-ratio: 16/9;
+        }
+
+        .close-video {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            color: var(--text-color);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-video:hover {
+            color: var(--primary-color);
+        }
+
+        .user-menu {
+            position: relative;
+        }
+
+        .user-menu .dropdown-menu {
+            background-color: rgba(0, 0, 0, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .user-menu .dropdown-item {
+            color: var(--text-color);
+        }
+
+        .user-menu .dropdown-item:hover {
+            background-color: var(--primary-color);
+        }
+
+        .badge {
+            background-color: var(--primary-color);
+            margin-right: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .series-header {
+                height: 50vh;
+            }
+
+            .series-title {
+                font-size: 2rem;
+            }
+
+            .series-info {
+                flex-wrap: wrap;
+            }
+
+            .series-actions {
+                flex-direction: column;
+            }
+
+            .episodes-list {
+                grid-template-columns: 1fr;
+            }
+
+            .cast-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 1rem;
+            }
+
+            .cast-image {
+                height: 200px;
+            }
         }
     </style>
 </head>
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <a class="navbar-brand" href="../index.html">Ryzem Cine</a>
+            <a class="navbar-brand" href="/">Ryzem Cine</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="../index.html#filmes">Filmes</a>
+                        <a class="nav-link" href="/">Início</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="../index.html#series">Séries</a>
+                        <a class="nav-link" href="/movies">Filmes</a>
                     </li>
-                    <li class="nav-item" id="loginNavItem">
-                        <a class="nav-link" href="login.html">Login</a>
-                    </li>
-                    <li class="nav-item user-menu" id="userMenu" style="display: none;">
-                        <div class="user-avatar" id="userAvatar">U</div>
-                        <div class="user-menu-content">
-                            <a href="#" class="user-menu-item" id="userName">Usuário</a>
-                            <a href="#" class="user-menu-item">Minha Lista</a>
-                            <a href="#" class="user-menu-item">Configurações</a>
-                            <a href="#" class="user-menu-item" id="logoutButton">Sair</a>
-                        </div>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/series">Séries</a>
                     </li>
                 </ul>
+                <div class="user-menu">
+                    <button class="btn btn-link text-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="userName">Usuário</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="/profile">Meu Perfil</a></li>
+                        <li><a class="dropdown-item" href="/watchlist">Minha Lista</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" id="logoutBtn">Sair</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </nav>
 
     <!-- Series Header -->
-    <header class="series-header" id="seriesHeader">
-        <div class="container series-info">
-            <h1 class="display-4 fw-bold" id="seriesTitle">Título da Série</h1>
-            <div class="d-flex align-items-center mb-3">
-                <span class="me-3" id="seriesYear">2024</span>
-                <span class="me-3" id="seriesSeasons">1 Temporada</span>
-                <span class="me-3" id="seriesGenre">Gênero</span>
-                <span><i class="fas fa-star text-warning"></i> <span id="seriesRating">0.0</span></span>
+    <div class="series-header" id="seriesHeader">
+        <div class="series-header-content">
+            <h1 class="series-title" id="seriesTitle">Carregando...</h1>
+            <div class="series-info">
+                <div class="series-info-item">
+                    <i class="fas fa-star"></i>
+                    <span id="seriesRating">0.0</span>
+                </div>
+                <div class="series-info-item">
+                    <i class="fas fa-calendar"></i>
+                    <span id="seriesYear">2024</span>
+                </div>
+                <div class="series-info-item">
+                    <i class="fas fa-film"></i>
+                    <span id="seriesSeasons">0 temporadas</span>
+                </div>
             </div>
-            <p class="lead" id="seriesDescription">Descrição da série...</p>
-            <div class="d-flex gap-2">
-                <button class="btn btn-primary btn-lg" id="playButton">
-                    <i class="fas fa-play me-2"></i> Assistir
+            <p class="series-description" id="seriesDescription">Carregando descrição...</p>
+            <div class="series-actions">
+                <button class="btn btn-primary" id="watchBtn">
+                    <i class="fas fa-play"></i> Assistir
                 </button>
-                <button class="btn btn-outline-light btn-lg" id="addToListButton">
-                    <i class="fas fa-plus me-2"></i> Minha Lista
+                <button class="btn btn-outline-light" id="watchlistBtn">
+                    <i class="fas fa-plus"></i> Minha Lista
                 </button>
             </div>
-        </div>
-    </header>
-
-    <!-- Video Player -->
-    <div class="container mt-4">
-        <div class="video-container" id="videoPlayer">
-            <iframe src="" frameborder="0" allowfullscreen></iframe>
         </div>
     </div>
 
-    <!-- Episodes Section -->
-    <section class="py-5">
+    <!-- Series Content -->
+    <div class="series-content">
         <div class="container">
-            <h2 class="mb-4">Episódios</h2>
-            <div class="row" id="episodesContainer">
-                <!-- Episodes will be loaded dynamically -->
+            <!-- Temporadas -->
+            <h2 class="section-title">Temporadas</h2>
+            <div class="seasons-list" id="seasonsList">
+                <!-- Conteúdo será carregado dinamicamente -->
             </div>
-        </div>
-    </section>
 
-    <!-- Cast Section -->
-    <section class="py-5 bg-dark">
-        <div class="container">
-            <h2 class="mb-4">Elenco</h2>
-            <div class="row" id="castContainer">
-                <!-- Cast members will be loaded dynamically -->
+            <!-- Elenco -->
+            <h2 class="section-title">Elenco</h2>
+            <div class="cast-grid" id="castGrid">
+                <!-- Conteúdo será carregado dinamicamente -->
             </div>
         </div>
-    </section>
+    </div>
+
+    <!-- Video Player -->
+    <div class="video-player" id="videoPlayer">
+        <div class="video-container">
+            <video id="episodeVideo" controls>
+                <source src="" type="video/mp4">
+                Seu navegador não suporta o elemento de vídeo.
+            </video>
+        </div>
+        <div class="close-video" id="closeVideo">
+            <i class="fas fa-times"></i>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Verificar se o usuário está logado
-        function checkAuthStatus() {
+        // Verificar autenticação
+        function checkAuth() {
             const token = localStorage.getItem('token');
-            const loginNavItem = document.getElementById('loginNavItem');
-            const userMenu = document.getElementById('userMenu');
-            
-            if (token) {
-                loginNavItem.style.display = 'none';
-                userMenu.style.display = 'block';
-                fetchUserInfo();
-            } else {
-                loginNavItem.style.display = 'block';
-                userMenu.style.display = 'none';
+            if (!token) {
+                window.location.href = '/login';
+                return;
             }
+            fetchUserInfo();
+            loadSeriesDetails();
         }
 
-        // Obter informações do usuário
+        // Buscar informações do usuário
         async function fetchUserInfo() {
-            const token = localStorage.getItem('token');
             try {
                 const response = await fetch('/api/auth/me', {
                     headers: {
-                        'Authorization': `Bearer ${token}`
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
                     }
                 });
-                
-                if (response.ok) {
-                    const user = await response.json();
-                    document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
-                    document.getElementById('userName').textContent = user.name;
-                }
+                const user = await response.json();
+                document.getElementById('userName').textContent = user.name;
             } catch (error) {
-                console.error('Erro ao obter informações do usuário:', error);
+                console.error('Erro ao buscar informações do usuário:', error);
+                window.location.href = '/login';
             }
         }
 
-        // Configurar o botão de logout
-        document.getElementById('logoutButton').addEventListener('click', (e) => {
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', (e) => {
             e.preventDefault();
             localStorage.removeItem('token');
-            window.location.reload();
+            window.location.href = '/';
         });
 
         // Carregar detalhes da série
         async function loadSeriesDetails() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const seriesId = urlParams.get('id');
-
-            if (!seriesId) {
-                window.location.href = '../index.html';
-                return;
-            }
-
             try {
-                const response = await fetch(`/api/series/${seriesId}`);
-                if (!response.ok) {
-                    throw new Error('Erro ao carregar detalhes da série');
-                }
+                const urlParams = new URLSearchParams(window.location.search);
+                const seriesId = urlParams.get('id');
 
+                const response = await fetch(`/api/series/${seriesId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
                 const series = await response.json();
-                
-                // Atualizar o cabeçalho
+
+                // Atualizar cabeçalho
                 document.getElementById('seriesHeader').style.backgroundImage = `url(${series.posterUrl})`;
                 document.getElementById('seriesTitle').textContent = series.title;
-                document.getElementById('seriesYear').textContent = series.year;
-                document.getElementById('seriesSeasons').textContent = `${series.seasons} Temporada${series.seasons > 1 ? 's' : ''}`;
-                document.getElementById('seriesGenre').textContent = series.genre.join(', ');
                 document.getElementById('seriesRating').textContent = series.rating.toFixed(1);
+                document.getElementById('seriesYear').textContent = series.releaseYear;
+                document.getElementById('seriesSeasons').textContent = `${series.seasons} temporadas`;
                 document.getElementById('seriesDescription').textContent = series.description;
 
-                // Carregar episódios
-                const episodesContainer = document.getElementById('episodesContainer');
-                series.episodes.forEach(episode => {
-                    const episodeCard = document.createElement('div');
-                    episodeCard.className = 'col-md-4 mb-4';
-                    episodeCard.innerHTML = `
-                        <div class="episode-card">
-                            <img src="${episode.thumbnailUrl}" alt="${episode.title}">
-                            <div class="p-3">
-                                <h5>${episode.title}</h5>
-                                <p class="mb-2">${episode.description}</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span>Episódio ${episode.number}</span>
-                                    <span>${episode.duration} min</span>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    episodesContainer.appendChild(episodeCard);
-                });
+                // Atualizar título da página
+                document.title = `${series.title} - Ryzem Cine`;
+
+                // Carregar temporadas
+                loadSeasons(series.seasons);
 
                 // Carregar elenco
-                const castContainer = document.getElementById('castContainer');
-                series.cast.forEach(member => {
-                    const castCard = document.createElement('div');
-                    castCard.className = 'col-md-3 mb-4';
-                    castCard.innerHTML = `
-                        <div class="cast-card">
-                            <img src="${member.photoUrl}" alt="${member.name}">
-                            <h5>${member.name}</h5>
-                            <p class="text-muted">${member.character}</p>
-                        </div>
-                    `;
-                    castContainer.appendChild(castCard);
-                });
+                loadCast(series.cast);
 
+                // Configurar botões
+                setupButtons(series);
             } catch (error) {
                 console.error('Erro ao carregar detalhes da série:', error);
-                // Adicionar conteúdo de exemplo em caso de erro
-                addExampleContent();
             }
         }
 
-        // Adicionar conteúdo de exemplo
-        function addExampleContent() {
-            const episodesContainer = document.getElementById('episodesContainer');
-            const castContainer = document.getElementById('castContainer');
-
-            // Episódios de exemplo
-            const exampleEpisodes = [
-                { title: 'Episódio 1', description: 'Descrição do episódio 1', number: 1, duration: 45, thumbnailUrl: 'https://source.unsplash.com/random/300x200/?tv' },
-                { title: 'Episódio 2', description: 'Descrição do episódio 2', number: 2, duration: 42, thumbnailUrl: 'https://source.unsplash.com/random/300x200/?series' },
-                { title: 'Episódio 3', description: 'Descrição do episódio 3', number: 3, duration: 48, thumbnailUrl: 'https://source.unsplash.com/random/300x200/?show' }
-            ];
-
-            exampleEpisodes.forEach(episode => {
-                const episodeCard = document.createElement('div');
-                episodeCard.className = 'col-md-4 mb-4';
-                episodeCard.innerHTML = `
-                    <div class="episode-card">
-                        <img src="${episode.thumbnailUrl}" alt="${episode.title}">
-                        <div class="p-3">
-                            <h5>${episode.title}</h5>
-                            <p class="mb-2">${episode.description}</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span>Episódio ${episode.number}</span>
-                                <span>${episode.duration} min</span>
+        // Carregar temporadas
+        function loadSeasons(seasons) {
+            const container = document.getElementById('seasonsList');
+            container.innerHTML = seasons.map(season => `
+                <div class="season-card">
+                    <div class="season-header" onclick="toggleSeason(${season.number})">
+                        <div>
+                            <h3 class="season-title">Temporada ${season.number}</h3>
+                            <div class="season-meta">
+                                <span>${season.episodes.length} episódios</span>
                             </div>
                         </div>
+                        <i class="fas fa-chevron-down"></i>
                     </div>
-                `;
-                episodesContainer.appendChild(episodeCard);
-            });
-
-            // Elenco de exemplo
-            const exampleCast = [
-                { name: 'Ator 1', character: 'Personagem 1', photoUrl: 'https://source.unsplash.com/random/120x120/?person' },
-                { name: 'Ator 2', character: 'Personagem 2', photoUrl: 'https://source.unsplash.com/random/120x120/?actor' },
-                { name: 'Ator 3', character: 'Personagem 3', photoUrl: 'https://source.unsplash.com/random/120x120/?celebrity' },
-                { name: 'Ator 4', character: 'Personagem 4', photoUrl: 'https://source.unsplash.com/random/120x120/?star' }
-            ];
-
-            exampleCast.forEach(member => {
-                const castCard = document.createElement('div');
-                castCard.className = 'col-md-3 mb-4';
-                castCard.innerHTML = `
-                    <div class="cast-card">
-                        <img src="${member.photoUrl}" alt="${member.name}">
-                        <h5>${member.name}</h5>
-                        <p class="text-muted">${member.character}</p>
+                    <div class="season-content" id="season${season.number}">
+                        <div class="episodes-list">
+                            ${season.episodes.map(episode => `
+                                <div class="episode-card">
+                                    <img src="${episode.thumbnailUrl}" alt="${episode.title}" class="episode-image">
+                                    <div class="episode-info">
+                                        <h4 class="episode-title">${episode.number}. ${episode.title}</h4>
+                                        <div class="episode-meta">
+                                            <span><i class="fas fa-clock"></i> ${episode.duration} min</span>
+                                        </div>
+                                        <p class="episode-description">${episode.description}</p>
+                                        <button class="btn btn-play" onclick="playEpisode('${episode.videoUrl}')">
+                                            <i class="fas fa-play"></i> Assistir
+                                        </button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
                     </div>
-                `;
-                castContainer.appendChild(castCard);
+                </div>
+            `).join('');
+        }
+
+        // Alternar visibilidade da temporada
+        function toggleSeason(number) {
+            const content = document.getElementById(`season${number}`);
+            const header = content.previousElementSibling;
+            const icon = header.querySelector('i');
+
+            content.classList.toggle('active');
+            icon.style.transform = content.classList.contains('active') ? 'rotate(180deg)' : '';
+        }
+
+        // Carregar elenco
+        function loadCast(cast) {
+            const container = document.getElementById('castGrid');
+            container.innerHTML = cast.map(person => `
+                <div class="cast-card">
+                    <img src="${person.photoUrl}" alt="${person.name}" class="cast-image">
+                    <div class="cast-info">
+                        <div class="cast-name">${person.name}</div>
+                        <div class="cast-role">${person.role}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Configurar botões
+        function setupButtons(series) {
+            const watchlistBtn = document.getElementById('watchlistBtn');
+
+            // Botão da lista
+            watchlistBtn.addEventListener('click', async () => {
+                try {
+                    const response = await fetch('/api/users/watchlist', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ seriesId: series._id })
+                    });
+
+                    if (response.ok) {
+                        watchlistBtn.innerHTML = '<i class="fas fa-check"></i> Na Minha Lista';
+                        watchlistBtn.disabled = true;
+                    }
+                } catch (error) {
+                    console.error('Erro ao adicionar à lista:', error);
+                }
             });
         }
 
-        // Configurar o botão de play
-        document.getElementById('playButton').addEventListener('click', () => {
+        // Reproduzir episódio
+        function playEpisode(videoUrl) {
             const videoPlayer = document.getElementById('videoPlayer');
-            const iframe = videoPlayer.querySelector('iframe');
+            const episodeVideo = document.getElementById('episodeVideo');
             
-            if (videoPlayer.style.display === 'none') {
-                videoPlayer.style.display = 'block';
-                iframe.src = 'https://www.youtube.com/embed/dQw4w9WgXcQ'; // URL de exemplo
-                document.getElementById('playButton').innerHTML = '<i class="fas fa-pause me-2"></i> Pausar';
+            episodeVideo.src = videoUrl;
+            videoPlayer.classList.add('active');
+            episodeVideo.play();
+        }
+
+        // Fechar vídeo
+        document.getElementById('closeVideo').addEventListener('click', () => {
+            const videoPlayer = document.getElementById('videoPlayer');
+            const episodeVideo = document.getElementById('episodeVideo');
+            
+            videoPlayer.classList.remove('active');
+            episodeVideo.pause();
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
             } else {
-                videoPlayer.style.display = 'none';
-                iframe.src = '';
-                document.getElementById('playButton').innerHTML = '<i class="fas fa-play me-2"></i> Assistir';
+                navbar.classList.remove('scrolled');
             }
         });
 
-        // Configurar o botão de adicionar à lista
-        document.getElementById('addToListButton').addEventListener('click', async () => {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                window.location.href = 'login.html';
-                return;
-            }
-
-            const urlParams = new URLSearchParams(window.location.search);
-            const seriesId = urlParams.get('id');
-
-            try {
-                const response = await fetch('/api/watchlist/add', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({ seriesId })
-                });
-
-                if (response.ok) {
-                    alert('Série adicionada à sua lista!');
-                } else {
-                    throw new Error('Erro ao adicionar à lista');
-                }
-            } catch (error) {
-                console.error('Erro ao adicionar à lista:', error);
-                alert('Erro ao adicionar à lista. Tente novamente mais tarde.');
-            }
-        });
-
-        // Inicializar a página
-        document.addEventListener('DOMContentLoaded', () => {
-            checkAuthStatus();
-            loadSeriesDetails();
-        });
+        // Inicializar
+        checkAuth();
     </script>
 </body>
 </html> 

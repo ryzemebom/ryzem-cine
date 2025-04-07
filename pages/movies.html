@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filmes - Ryzem Cine</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #e50914;
+            --secondary-color: #141414;
+            --text-color: #ffffff;
+            --hover-color: #ff0f1a;
+        }
+
+        body {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .navbar {
+            background-color: rgba(0, 0, 0, 0.9);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: background-color 0.3s;
+        }
+
+        .navbar.scrolled {
+            background-color: var(--secondary-color);
+        }
+
+        .navbar-brand {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .nav-link {
+            color: var(--text-color);
+            margin: 0 1rem;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color);
+        }
+
+        .movies-header {
+            position: relative;
+            height: 40vh;
+            background-image: url('/assets/images/movies-bg.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .movies-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), var(--secondary-color));
+        }
+
+        .movies-header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .movies-header h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .movies-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .movies-content {
+            padding: 4rem 2rem;
+        }
+
+        .filters {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.8rem 1rem 0.8rem 2.5rem;
+            background-color: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            color: var(--text-color);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .filter-select {
+            flex: 1;
+            padding: 0.8rem;
+            background-color: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            color: var(--text-color);
+        }
+
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .movie-card {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .movie-card:hover {
+            transform: scale(1.05);
+        }
+
+        .movie-image {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+        }
+
+        .movie-info {
+            padding: 1.5rem;
+        }
+
+        .movie-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .movie-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .movie-description {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .movie-badges {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .badge {
+            background-color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .btn-details {
+            width: 100%;
+            background-color: var(--primary-color);
+            border: none;
+            padding: 0.8rem;
+            border-radius: 5px;
+            color: var(--text-color);
+            transition: background-color 0.3s;
+        }
+
+        .btn-details:hover {
+            background-color: var(--hover-color);
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .page-btn {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            color: var(--text-color);
+            transition: background-color 0.3s;
+        }
+
+        .page-btn:hover {
+            background-color: var(--primary-color);
+        }
+
+        .page-btn.active {
+            background-color: var(--primary-color);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state p {
+            opacity: 0.8;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .user-menu {
+            position: relative;
+        }
+
+        .user-menu .dropdown-menu {
+            background-color: rgba(0, 0, 0, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .user-menu .dropdown-item {
+            color: var(--text-color);
+        }
+
+        .user-menu .dropdown-item:hover {
+            background-color: var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .movies-header {
+                height: 30vh;
+            }
+
+            .movies-header h1 {
+                font-size: 2rem;
+            }
+
+            .movies-header p {
+                font-size: 1rem;
+            }
+
+            .filter-group {
+                flex-direction: column;
+            }
+
+            .movies-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 1rem;
+            }
+
+            .movie-image {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="/">Ryzem Cine</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Início</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/movies">Filmes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/series">Séries</a>
+                    </li>
+                </ul>
+                <div class="user-menu">
+                    <button class="btn btn-link text-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="userName">Usuário</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="/profile">Meu Perfil</a></li>
+                        <li><a class="dropdown-item" href="/watchlist">Minha Lista</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" id="logoutBtn">Sair</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Movies Header -->
+    <div class="movies-header">
+        <div class="movies-header-content">
+            <h1>Filmes</h1>
+            <p>Descubra os melhores filmes em um só lugar</p>
+        </div>
+    </div>
+
+    <!-- Movies Content -->
+    <div class="movies-content">
+        <div class="container">
+            <!-- Filters -->
+            <div class="filters">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Buscar filmes...">
+                </div>
+                <div class="filter-group">
+                    <select class="filter-select" id="genreFilter">
+                        <option value="">Todos os Gêneros</option>
+                        <option value="acao">Ação</option>
+                        <option value="aventura">Aventura</option>
+                        <option value="comedia">Comédia</option>
+                        <option value="drama">Drama</option>
+                        <option value="ficcao">Ficção Científica</option>
+                        <option value="romance">Romance</option>
+                        <option value="suspense">Suspense</option>
+                    </select>
+                    <select class="filter-select" id="yearFilter">
+                        <option value="">Todos os Anos</option>
+                        <option value="2024">2024</option>
+                        <option value="2023">2023</option>
+                        <option value="2022">2022</option>
+                        <option value="2021">2021</option>
+                        <option value="2020">2020</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Movies Grid -->
+            <div class="movies-grid" id="moviesGrid">
+                <!-- Conteúdo será carregado dinamicamente -->
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <i class="fas fa-film"></i>
+                <h3>Nenhum filme encontrado</h3>
+                <p>Tente ajustar os filtros ou fazer uma nova busca</p>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination" id="pagination">
+                <button class="page-btn" id="prevPage">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="page-btn active" id="currentPage">1</button>
+                <button class="page-btn" id="nextPage">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Estado da aplicação
+        const state = {
+            currentPage: 1,
+            totalPages: 1,
+            filters: {
+                search: '',
+                genre: '',
+                year: ''
+            }
+        };
+
+        // Verificar autenticação
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = '/login';
+                return;
+            }
+            fetchUserInfo();
+            loadMovies();
+        }
+
+        // Buscar informações do usuário
+        async function fetchUserInfo() {
+            try {
+                const response = await fetch('/api/auth/me', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                const user = await response.json();
+                document.getElementById('userName').textContent = user.name;
+            } catch (error) {
+                console.error('Erro ao buscar informações do usuário:', error);
+                window.location.href = '/login';
+            }
+        }
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('token');
+            window.location.href = '/';
+        });
+
+        // Carregar filmes
+        async function loadMovies() {
+            try {
+                const queryParams = new URLSearchParams({
+                    page: state.currentPage,
+                    search: state.filters.search,
+                    genre: state.filters.genre,
+                    year: state.filters.year
+                });
+
+                const response = await fetch(`/api/movies?${queryParams}`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                const data = await response.json();
+
+                state.totalPages = data.totalPages;
+                renderMovies(data.movies);
+                updatePagination();
+            } catch (error) {
+                console.error('Erro ao carregar filmes:', error);
+            }
+        }
+
+        // Renderizar filmes
+        function renderMovies(movies) {
+            const container = document.getElementById('moviesGrid');
+            const emptyState = document.getElementById('emptyState');
+
+            if (movies.length === 0) {
+                container.style.display = 'none';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            container.style.display = 'grid';
+            emptyState.style.display = 'none';
+
+            container.innerHTML = movies.map(movie => `
+                <div class="movie-card">
+                    <img src="${movie.posterUrl}" alt="${movie.title}" class="movie-image">
+                    <div class="movie-info">
+                        <h3 class="movie-title">${movie.title}</h3>
+                        <div class="movie-meta">
+                            <span><i class="fas fa-star"></i> ${movie.rating.toFixed(1)}</span>
+                            <span><i class="fas fa-calendar"></i> ${movie.releaseYear}</span>
+                            <span><i class="fas fa-clock"></i> ${movie.duration} min</span>
+                        </div>
+                        <div class="movie-badges">
+                            ${movie.genre.map(g => `<span class="badge">${g}</span>`).join('')}
+                        </div>
+                        <p class="movie-description">${movie.description}</p>
+                        <a href="/movie-details?id=${movie._id}" class="btn btn-details">
+                            Ver Detalhes
+                        </a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Atualizar paginação
+        function updatePagination() {
+            const currentPage = document.getElementById('currentPage');
+            const prevPage = document.getElementById('prevPage');
+            const nextPage = document.getElementById('nextPage');
+
+            currentPage.textContent = state.currentPage;
+            prevPage.disabled = state.currentPage === 1;
+            nextPage.disabled = state.currentPage === state.totalPages;
+        }
+
+        // Event Listeners
+        document.getElementById('searchInput').addEventListener('input', debounce((e) => {
+            state.filters.search = e.target.value;
+            state.currentPage = 1;
+            loadMovies();
+        }, 500));
+
+        document.getElementById('genreFilter').addEventListener('change', (e) => {
+            state.filters.genre = e.target.value;
+            state.currentPage = 1;
+            loadMovies();
+        });
+
+        document.getElementById('yearFilter').addEventListener('change', (e) => {
+            state.filters.year = e.target.value;
+            state.currentPage = 1;
+            loadMovies();
+        });
+
+        document.getElementById('prevPage').addEventListener('click', () => {
+            if (state.currentPage > 1) {
+                state.currentPage--;
+                loadMovies();
+            }
+        });
+
+        document.getElementById('nextPage').addEventListener('click', () => {
+            if (state.currentPage < state.totalPages) {
+                state.currentPage++;
+                loadMovies();
+            }
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Debounce function
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Inicializar
+        checkAuth();
+    </script>
+</body>
+</html> 
